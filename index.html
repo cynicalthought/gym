@@ -85,15 +85,26 @@ body{
 .library-search input{width:100%;padding:.85rem 1rem .85rem 2.65rem;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--text);font:500 .9rem 'Inter',sans-serif;outline:none}
 .library-search input:focus{border-color:rgba(121,217,187,.6);box-shadow:0 0 0 3px rgba(121,217,187,.08)}
 .library-search::before{content:'⌕';position:absolute;left:1rem;top:.55rem;color:var(--faint);font-size:1.3rem}
-.category-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.55rem}
-.category-link{display:flex;align-items:center;gap:.65rem;padding:.65rem;border:1px solid var(--line);border-radius:12px;background:linear-gradient(145deg,rgba(255,255,255,.035),transparent),var(--surface);color:var(--text);text-align:left;cursor:pointer;transition:.16s}
-.category-link:hover,.category-link:focus-visible,.category-link.selected{border-color:rgba(121,217,187,.5);background:rgba(121,217,187,.09);outline:none}
+
+/* Category Navigation Cards with Larger Images and Descriptions */
+.category-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin-top:1rem}
+@media(max-width:820px){.category-nav{grid-template-columns:1fr}}
+.category-link{
+  display:flex;align-items:flex-start;gap:1.15rem;padding:1.25rem;border:1px solid var(--line);border-radius:18px;
+  background:linear-gradient(145deg,rgba(255,255,255,.035),transparent),var(--surface);color:var(--text);
+  text-align:left;cursor:pointer;transition:.2s cubic-bezier(.4,0,.2,1);box-shadow:0 8px 24px rgba(0,0,0,.15);
+}
+.category-link:hover,.category-link:focus-visible,.category-link.selected{
+  border-color:rgba(121,217,187,.5);background:linear-gradient(145deg,rgba(121,217,187,.08),rgba(121,217,187,.02)),var(--surface);
+  transform:translateY(-2px);box-shadow:0 12px 32px rgba(0,0,0,.22);outline:none;
+}
+.category-icon{width:82px;height:82px;flex:0 0 82px;border-radius:14px;background:rgba(121,217,187,.09);overflow:hidden;border:1px solid rgba(213,231,226,.12)}
+.category-link-text{min-width:0;display:flex;flex-direction:column;gap:.3rem}
+.category-link-name{display:block;font-size:1.12rem;font-weight:750;font-family:'Manrope','Inter',sans-serif;letter-spacing:-.01em}
+.category-link-count{display:inline-block;width:fit-content;padding:.15rem .55rem;border-radius:6px;background:rgba(121,217,187,.1);color:var(--accent);font-size:.72rem;font-weight:700}
+.category-link-desc{display:block;color:var(--mute);font-size:.82rem;line-height:1.45;margin-top:.1rem}
+
 .library-prompt{padding:1.2rem;border:1px dashed var(--line);border-radius:12px;color:var(--faint);font-size:.84rem;text-align:center}
-.category-icon{width:38px;height:38px;flex:0 0 38px;border-radius:10px;background:rgba(121,217,187,.09);display:grid;place-items:center}
-.category-icon svg{width:29px;height:29px}
-.category-link-text{min-width:0}
-.category-link-name{display:block;font-size:.78rem;font-weight:650}
-.category-link-count{display:block;color:var(--faint);font-size:.68rem;margin-top:.1rem}
 .library-results{font-size:.74rem;color:var(--faint);margin-top:-.25rem}
 .library-group{margin:.65rem 0;border:1px solid var(--line);border-radius:13px;background:rgba(255,255,255,.015);overflow:hidden;scroll-margin-top:1rem}
 .library-results-group{border:0;background:none;overflow:visible}
@@ -106,8 +117,7 @@ body{
 .library-group[open]>summary::after,.library-exercise[open]>summary::after{content:'−'}
 .library-count{color:var(--faint);font-size:.75rem;font-weight:500;margin-left:auto}
 .library-group-title{display:flex;align-items:center;gap:.7rem}
-.library-group-title .category-icon{width:36px;height:36px}
-@media(max-width:560px){.category-nav{grid-template-columns:repeat(2,minmax(0,1fr))}.library-exercise-meta{gap:.35rem;font-size:.68rem}.library-exercise>summary{gap:.5rem}.library-group>summary{padding:.75rem}}
+.library-group-title .category-icon{width:42px;height:42px}
 .library-exercises{padding:0 .65rem .65rem}
 .library-exercise{border-top:1px solid var(--line)}
 .library-exercise>summary{padding:.8rem .45rem;font-size:.87rem}
@@ -136,7 +146,6 @@ body{
 .exercise-visual-row .target-breakdown{display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:.55rem;padding:1rem}
 .exercise-visual-row .pie-chart{width:100%;aspect-ratio:760/460}
 
-/* Forced readable chart callout text styling */
 .chart-callout-name{fill:var(--text);font-family:'Inter',sans-serif;font-size:18px !important;font-weight:700;letter-spacing:-.01em}
 .chart-callout-share{fill:var(--accent2);font-family:'Inter',sans-serif;font-size:16px !important;font-weight:800}
 
@@ -292,8 +301,7 @@ footer{
 </div>
 
 <!-- Script inclusions -->
-<script src="media-paths.js"></script>
-<script src="workouts-data.js"></script>
+<script src="exercises.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

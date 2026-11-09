@@ -26,34 +26,31 @@ function targetBreakdown(ex) {
   const extrusion = sectors.map(({ path, color, dx, dy }) => `<path d="${path}" transform="translate(${dx} ${dy + depth})" fill="${color}" opacity=".42" stroke="#0e1417" stroke-width="1.8" stroke-linejoin="round"/>`).join('');
   const slices = sectors.map(({ path, color, dx, dy }) => `<path d="${path}" transform="translate(${dx} ${dy})" fill="${color}" stroke="#0e1417" stroke-width="1.8" stroke-linejoin="round" filter="drop-shadow(0 3px 5px rgba(0,0,0,.35))"/>`).join('');
 
-  // Separate left and right items
   const leftItems = sectors.filter(s => Math.cos(s.midAngle * Math.PI / 180) < 0);
   const rightItems = sectors.filter(s => Math.cos(s.midAngle * Math.PI / 180) >= 0);
 
-  // Sort strictly by vertical position (y-coordinate) so top slices map to top labels and bottom slices to bottom labels
   leftItems.sort((a, b) => (a.ay + a.dy) - (b.ay + b.dy));
   rightItems.sort((a, b) => (a.ay + a.dy) - (b.ay + b.dy));
 
   let formattedSectors = [];
   const totalH = 460;
-  const minGap = 74;
+  const pillHBox = 48;
+  const minGap = pillHBox + 16;
 
-  // Position left items symmetrically
-  let currentY = 45;
+  let currentLeftY = 45;
   leftItems.forEach((item, idx) => {
     const idealY = 45 + idx * ((totalH - 90) / Math.max(1, leftItems.length)) + 25;
-    const labelY = Math.max(currentY, Math.min(totalH - 55, idealY));
+    const labelY = Math.max(currentLeftY, Math.min(totalH - 55, idealY));
     formattedSectors.push({ ...item, labelY, textX: 45, textAnchor: 'start', isRight: false });
-    currentY = labelY + minGap;
+    currentLeftY = labelY + minGap;
   });
 
-  // Position right items symmetrically
-  currentY = 45;
+  let currentRightY = 45;
   rightItems.forEach((item, idx) => {
     const idealY = 45 + idx * ((totalH - 90) / Math.max(1, rightItems.length)) + 25;
-    const labelY = Math.max(currentY, Math.min(totalH - 55, idealY));
+    const labelY = Math.max(currentRightY, Math.min(totalH - 55, idealY));
     formattedSectors.push({ ...item, labelY, textX: 715, textAnchor: 'end', isRight: true });
-    currentY = labelY + minGap;
+    currentRightY = labelY + minGap;
   });
 
   const linkedTargets = formattedSectors.map(item => {
@@ -70,21 +67,21 @@ function targetBreakdown(ex) {
 
   const labelRows = formattedSectors.map(item => {
     const name = item.tg[lang] || item.tg.en;
-    const pillW = 165, pillH = 56;
+    const pillW = 175;
     const pillX = item.isRight ? item.textX - pillW : item.textX;
-    const pillY = item.labelY - 24;
+    const pillY = item.labelY - 22;
     const iconPath = CATEGORY_ICONS[item.tg.k] || CATEGORY_ICONS.chest;
-    const iconGroupX = pillX + 12;
-    const textStartX = pillX + 54;
+    const iconGroupX = pillX + 10;
+    const textStartX = pillX + 50;
 
     return `
-      <rect x="${pillX}" y="${pillY}" width="${pillW}" height="${pillH}" rx="14" fill="rgba(22, 30, 34, 0.94)" stroke="${item.color}" stroke-opacity="0.45" stroke-width="1.5"/>
-      <g transform="translate(${iconGroupX}, ${item.labelY - 16})" fill="none" stroke="${item.color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect width="32" height="32" rx="8" fill="rgba(121,217,187,0.12)" stroke="${item.color}" stroke-opacity="0.6"/>
-        <g transform="translate(4,4) scale(0.85)" fill="${item.color}" stroke="none">${iconPath}</g>
+      <rect x="${pillX}" y="${pillY}" width="${pillW}" height="${pillHBox}" rx="12" fill="rgba(22, 30, 34, 0.96)" stroke="${item.color}" stroke-opacity="0.5" stroke-width="1.5"/>
+      <g transform="translate(${iconGroupX}, ${item.labelY - 14})" fill="none" stroke="${item.color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect width="28" height="28" rx="7" fill="rgba(121,217,187,0.12)" stroke="${item.color}" stroke-opacity="0.6"/>
+        <g transform="translate(3,3) scale(0.75)" fill="${item.color}" stroke="none">${iconPath}</g>
       </g>
-      <text class="chart-callout-name" x="${textStartX}" y="${item.labelY - 3}" text-anchor="start" font-size="16" font-weight="750" fill="#f0f5f3">${name}</text>
-      <text class="chart-callout-share" x="${textStartX}" y="${item.labelY + 20}" text-anchor="start" font-size="15" font-weight="850" fill="#a4e8d2">${item.tg.p}%</text>
+      <text class="chart-callout-name" x="${textStartX}" y="${item.labelY - 3}" text-anchor="start" font-size="14" font-weight="750" fill="#f0f5f3">${name}</text>
+      <text class="chart-callout-share" x="${textStartX}" y="${item.labelY + 17}" text-anchor="start" font-size="13" font-weight="850" fill="#a4e8d2">${item.tg.p}%</text>
     `;
   }).join('');
 
@@ -159,9 +156,29 @@ function exerciseCard(ex, group = null) {
   return c;
 }
 
+function categoryImageSrc(group) {
+  const imageMap = {
+    groupBiceps: 'media/biceps/image.webp',
+    groupCalves: 'media/calves/image.avif',
+    groupChest: 'media/chest/image.avif',
+    groupCore: 'media/core/image.webp',
+    groupGlutes: 'media/glutes/image.jpg',
+    groupHamstrings: 'media/hamstrings/image.jpeg',
+    groupLowerBack: 'media/lower-back/image.webp',
+    groupMidBack: 'media/mid-back/image.webp',
+    groupQuads: 'media/quads/image.webp',
+    groupShoulders: 'media/shoulders/image.avif',
+    groupTriceps: 'media/triceps/image.webp'
+  };
+  return imageMap[group] || '';
+}
+
 function categoryIcon(group) {
-  const overlays = { groupCalves: '<path d="M27 42q5 1 9 0l-2 19-5 2-4-13Zm26 0q-5 1-9 0l2 19 5 2 4-13z"/>', groupCore: '<path d="M29 31h7v8h-7zm9 0h7v8h-7zm-9 10h7v8h-7zm9 0h7v8h-7z"/>', groupMidBack: '<path d="M23 18q9-5 18 0l-2 12-7 5-7-5z"/>', groupBiceps: '<path d="M19 22q-5 2-3 9l5 3 4-4-1-7zm26 0q5 2 3 9l-5 3-4-4 1-7z"/>', groupChest: '<path d="M25 18q6-4 10 1l-1 9q-6 3-10-1-2-5 1-9zm14 0q-6-4-10 1l1 9q6 3 10-1 2-5-1-9z"/>', groupTriceps: '<path d="M18 21q5-3 8 2l-2 11-5 2-4-7zm30 0q-5-3-8 2l2 11 5 2 4-7z"/>', groupGlutes: '<path d="M25 29q4-5 8-2l-1 10q-6 2-9-2zm14 0q-4-5-8-2l1 10q6 2 9-2z"/>', groupQuads: '<path d="M25 36h8l-2 12-3 10h-4l-1-12zm10 0h8l1 10-1 12h-4l-3-10z"/>', groupHamstrings: '<path d="M25 36h8l-2 12-3 10h-4l-1-12zm10 0h8l1 10-1 12h-4l-3-10 z"/>', groupShoulders: '<path d="M19 17q6-6 12 0l-2 9-8 2-5-5zm26 0q-6-6-12 0l2 9 8 2 5-5z"/>' };
-  return `<span class="category-icon" aria-hidden="true"><svg viewBox="0 0 64 64"><g fill="none" stroke="#879994" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="9" r="5"/><path d="M25 16q7-3 14 0l4 15-5 5 3 24M25 16l-4 15 5 5-3 24M21 22l-7 13m29-13 7 13"/></g><g fill="#79d9bb" opacity=".9">${overlays[group]}</g></svg></span>`;
+  const imgSrc = categoryImageSrc(group);
+  if (imgSrc) {
+    return `<span class="category-icon" aria-hidden="true"><img src="${imgSrc}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:12px;"></span>`;
+  }
+  return `<span class="category-icon" aria-hidden="true"></span>`;
 }
 
 function draw() {
@@ -169,13 +186,31 @@ function draw() {
     const box = $('#e' + d); box.innerHTML = ''; D[d].forEach(ex => box.appendChild(exerciseCard(ex)));
   }
   const all = $('#allExercises'); all.innerHTML = '';
-  const groupOrder = ['groupBiceps', 'groupChest', 'groupCore', 'groupCalves', 'groupGlutes', 'groupHamstrings', 'groupMidBack', 'groupQuads', 'groupShoulders', 'groupTriceps'];
+  
+  // Alphabetically ranked group order including Lower Back
+  const groupOrder = ['groupBiceps', 'groupCalves', 'groupChest', 'groupCore', 'groupGlutes', 'groupHamstrings', 'groupLowerBack', 'groupMidBack', 'groupQuads', 'groupShoulders', 'groupTriceps'];
+  
   const query = $('#exerciseSearch').value.trim();
   const categoryNav = $('#categoryNav'); categoryNav.innerHTML = '';
   groupOrder.forEach(group => {
     const exercises = exercisesForGroup(group);
-    const navButton = document.createElement('button'); navButton.className = 'category-link' + (activeLibraryGroup === group ? ' selected' : ''); navButton.type = 'button'; navButton.dataset.group = group;
-    navButton.innerHTML = `${categoryIcon(group)}<span class="category-link-text"><span class="category-link-name">${t(group)}</span><span class="category-link-count">${exercises.length} ${t('resultCount')}</span></span>`; categoryNav.appendChild(navButton);
+    const descKey = 'desc' + group.replace('group', '');
+    const description = t(descKey);
+
+    const navButton = document.createElement('button'); 
+    navButton.className = 'category-link' + (activeLibraryGroup === group ? ' selected' : ''); 
+    navButton.type = 'button'; 
+    navButton.dataset.group = group;
+    
+    navButton.innerHTML = `
+      ${categoryIcon(group)}
+      <span class="category-link-text">
+        <span class="category-link-name">${t(group)}</span>
+        <span class="category-link-count">${exercises.length} ${t('resultCount')}</span>
+        <span class="category-link-desc">${description}</span>
+      </span>`; 
+    categoryNav.appendChild(navButton);
+
     if (!exercises.length || (!query && activeLibraryGroup !== group)) return;
     if (activeLibraryGroup === group && !query) {
       const section = document.createElement('section'); section.className = 'library-group library-results-group'; section.dataset.fullView = 'true';
