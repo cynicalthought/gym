@@ -92,16 +92,21 @@ body{
 }
 .ex-muscles{font-size:.8rem;color:var(--faint);margin-top:.3rem}
 
-/* Proportional muscle distribution chart and compact legend */
-.target-breakdown{display:grid;grid-template-columns:minmax(112px,.8fr) minmax(0,1.35fr);gap:1rem;align-items:center;padding:0 1.25rem 1.1rem}
-.pie-chart{width:min(100%,160px);aspect-ratio:1;border-radius:50%;justify-self:center;border:3px solid #1b2228;box-shadow:0 8px 22px rgba(0,0,0,.22),inset 0 0 0 1px rgba(255,255,255,.12)}
+/* Muscle distribution: a labeled donut with matching anatomy thumbnails */
+.target-breakdown{display:grid;grid-template-columns:minmax(135px,.82fr) minmax(0,1.3fr);gap:1rem;align-items:center;padding:0 1.25rem 1.1rem}
+.pie-chart{width:min(100%,174px);aspect-ratio:1;justify-self:center;filter:drop-shadow(0 8px 18px rgba(0,0,0,.22))}
+.pie-chart svg{display:block;width:100%;height:100%;overflow:visible}
+.chart-total{fill:var(--text);font-family:'Instrument Sans',sans-serif;font-size:21px;font-weight:600;text-anchor:middle}
+.chart-caption{fill:var(--faint);font-family:'Instrument Sans',sans-serif;font-size:7px;font-weight:700;letter-spacing:1.3px;text-anchor:middle}
 .target-legend{list-style:none;display:flex;flex-direction:column;min-width:0}
-.target-legend-head,.target-item{display:grid;grid-template-columns:11px minmax(0,1fr) auto;align-items:center;gap:.55rem}
+.target-legend-head,.target-item{display:grid;grid-template-columns:10px 36px minmax(0,1fr) auto;align-items:center;gap:.45rem}
 .target-legend-head{padding:0 0 .35rem;color:var(--faint);font-size:.61rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
 .target-legend-head span:last-child{min-width:3.1rem;text-align:right}
-.target-item{padding:.44rem 0;border-bottom:1px solid rgba(226,235,240,.07)}
+.target-item{min-height:42px;padding:.28rem 0;border-bottom:1px solid rgba(226,235,240,.07)}
 .target-item:last-child{border-bottom:0}
-.target-swatch{width:9px;height:9px;border-radius:3px;background:var(--segment-color);box-shadow:0 0 7px color-mix(in srgb,var(--segment-color) 35%,transparent)}
+.target-swatch{width:8px;height:8px;border-radius:3px;background:var(--segment-color);box-shadow:0 0 6px rgba(255,255,255,.10)}
+.muscle-info{display:block;width:34px;height:34px}
+.muscle-info svg{display:block;width:100%;height:100%}
 .target-name{min-width:0;color:var(--text);font-size:.79rem;font-weight:550;line-height:1.25;overflow-wrap:anywhere}
 .target-share{min-width:3.1rem;text-align:right;color:var(--mute);font-size:.78rem;font-weight:600;font-variant-numeric:tabular-nums}
 
@@ -283,28 +288,65 @@ body { background-image:radial-gradient(ellipse 70% 35% at 50% -18%,rgba(101,183
 
 <script src="media-paths.js"></script>
 <script>
-const TARGET_COLORS=['#65b7a4','#829bd5','#d3a56b','#bd83ad','#dc796b'];
+const TARGET_COLORS=['#69c4ad','#91a9e5','#e3b978','#c999d2','#e48979'];
+const MUSCLE_BASE={
+  front:`<g fill="#47514f" stroke="#929e98" stroke-width="1.1" stroke-linejoin="round"><path d="M36 10v6l-8 3-6 3-4 8 4 9 5 4 1 13 7 7 8 0 7-7 1-13 5-4 4-9-4-8-6-3-8-3v-6Z"/><path d="M22 22 16 24l-5 8-2 10 4 3 5-7 4-8Zm36 0 6 2 5 8 2 10-4 3-5-7-4-8Z"/><circle cx="40" cy="6" r="5"/></g><path d="M40 17v39M26 28q6 3 14 2m14-2q-6 3-14 2M29 43q5 2 11 1m11-1q-5 2-11 1" fill="none" stroke="#9da8a2" stroke-width=".8"/>`,
+  back:`<g fill="#47514f" stroke="#929e98" stroke-width="1.1" stroke-linejoin="round"><path d="M36 10v6l-8 3-6 3-4 8 4 9 5 4 1 13 7 7 8 0 7-7 1-13 5-4 4-9-4-8-6-3-8-3v-6Z"/><path d="M22 22 16 24l-5 8-2 10 4 3 5-7 4-8Zm36 0 6 2 5 8 2 10-4 3-5-7-4-8Z"/><circle cx="40" cy="6" r="5"/></g><path d="M40 17v40M25 28q7 5 15 3m15-3q-7 5-15 3M28 45q5 3 12 2m12-2q-5 3-12 2" fill="none" stroke="#9da8a2" stroke-width=".8"/>`,
+  lowerFront:`<g fill="#47514f" stroke="#929e98" stroke-width="1.1" stroke-linejoin="round"><path d="M25 3q15 5 30 0l4 9-5 9-3 17-2 30-5 1-4-28-4 28-5-1-2-30-3-17-5-9Z"/><path d="M25 3q-7 5-7 12l6 8 8-4 4-14Zm30 0q7 5 7 12l-6 8-8-4-4-14Z"/></g><path d="M40 13v34M28 27q6 3 12 2m12-2q-6 3-12 2" fill="none" stroke="#9da8a2" stroke-width=".8"/>`,
+  lowerBack:`<g fill="#47514f" stroke="#929e98" stroke-width="1.1" stroke-linejoin="round"><path d="M25 3q15 5 30 0l4 9-5 9-3 17-2 30-5 1-4-28-4 28-5-1-2-30-3-17-5-9Z"/><path d="M25 3q-7 5-7 12l6 8 8-4 4-14Zm30 0q7 5 7 12l-6 8-8-4-4-14Z"/></g><path d="M40 12v35M28 31q6 5 12 3m12-3q-6 5-12 3" fill="none" stroke="#9da8a2" stroke-width=".8"/>`
+};
+const MUSCLE_MAP={
+  glutes:['lowerBack','M26 8q5-5 14-2l-1 14q-8 3-13-2-3-5 0-10Zm28 0q-5-5-14-2l1 14q8 3 13-2 3-5 0-10Z','M28 9q4 6 10 8m-7-11q4 5 8 7m12-4q-4 6-10 8m7-11q-4 5-8 7'],
+  hamstrings:['lowerBack','M29 22q5 1 11-2l-1 23-4 23-4 1-2-27Zm22 0q-5 1-11-2l1 23 4 23 4 1 2-27Z','M32 25q5 12 3 31m12-31q-5 12-3 31'],
+  quads:['lowerFront','M28 20q5 2 12-1l-1 25-4 22-4 1-3-26Zm24 0q-5 2-12-1l1 25 4 22 4 1 3-26Z','M31 24q6 12 5 31m12-31q-6 12-5 31'],
+  erectors:['back','M37 19q3-3 6 0l1 40-4 5-4-5Z','M39 23v34m3-34v34'],
+  traps:['back','M34 17q6 3 12 0l9 7-7 13-8-4-8 4-7-13Z','M35 20l5 12m5-12-5 12'],
+  lats:['back','M27 26q6 4 13 7l-1 24-12-5-5-15Zm26 0q-6 4-13 7l1 24 12-5 5-15Z','M29 31q5 10 8 22m14-22q-5 10-8 22'],
+  rhomboids:['back','M36 27l4 4 4-4 7 8-7 8-4-3-4 3-7-8Z','M31 34l7 3m11-3-7 3m-6-5 4 10'],
+  biceps:['front','M17 26q3-5 6 0l-2 12-4 2-3-4Zm40 0q-3-5-6 0l2 12 4 2 3-4Z','M16 29l4 7m38-7-4 7'],
+  brachialis:['front','M20 29q3-3 5 1l-2 9-4-1-2-4Zm40 0q-3-3-5 1l2 9 4-1 2-4Z','M19 31l4 6m38-6-4 6'],
+  forearms:['front','M12 37l5 1-2 15-4 1-2-5Zm56 0-5 1 2 15 4 1 2-5Z','M13 40l2 11m52-11-2 11'],
+  chest:['front','M27 23q6-5 13 0l-1 12q-7 4-12-1-4-5 0-11Zm26 0q-6-5-13 0l1 12q7 4 12-1 4-5 0-11Z','M29 26q5 2 9 7m12-5q-5 2-9 7'],
+  upperchest:['front','M27 23q6-5 13 0l-1 7q-7 2-12-1-3-3 0-6Zm26 0q-6-5-13 0l1 7q7 2 12-1 3-3 0-6Z','M30 24l7 4m13-4-7 4'],
+  triceps:['back','M16 25q4-3 7 1l-2 13-5 2-3-6Zm48 0q-4-3-7 1l2 13 5 2 3-6Z','M16 29l5 8m43-8-5 8'],
+  frontdelts:['front','M21 19q5-5 9 1l-2 9q-6 2-9-3-2-4 2-7Zm44 0q-5-5-9 1l2 9q6 2 9-3 2-4-2-7Z','M22 21l6 5m37-5-6 5'],
+  sidedelts:['front','M18 20q5-5 9-1l-2 10-6 1-4-5Zm50 0q-5-5-9-1l2 10 6 1 4-5Z','M17 22l6 5m47-5-6 5'],
+  reardelts:['back','M21 19q5-5 9 1l-2 9q-6 2-9-3-2-4 2-7Zm44 0q-5-5-9 1l2 9q6 2 9-3 2-4-2-7Z','M22 21l6 5m37-5-6 5'],
+  core:['front','M37 36h7v7h-7zm0 8h7v7h-7zm0 8h7v7h-7zm-8-16h7v7h-7zm0 8h7v7h-7zm0 8h7v7h-7z','M29 42h7m1 0h7m-15 8h7m1 0h7'],
+  rotator:['back','M20 20q5-4 8 1l-2 7-7 1-3-4Zm40 0q-5-4-8 1l2 7 7 1 3-4Z','M19 22l6 4m37-4-6 4'],
+  anconeus:['back','M14 38l5-2 4 5-3 6-6-2Zm52 0-5-2-4 5 3 6 6-2Z','M15 40l6 4m45-4-6 4']
+};
+function muscleInfographic(key,color){
+  const [view,shape,fibers]=MUSCLE_MAP[key]||MUSCLE_MAP.chest;
+  return `<svg viewBox="0 0 80 72" role="img" aria-label="${key} muscle map"><g>${MUSCLE_BASE[view]}</g><path d="${shape}" fill="${color}" stroke="#f2c3ae" stroke-width="1.1" stroke-linejoin="round"/><path d="${fibers}" fill="none" stroke="#593c42" stroke-width=".8" stroke-linecap="round" opacity=".85"/></svg>`;
+}
 function targetBreakdown(ex){
-  let cursor=0;
   const items=ex.targets.map((tg,index)=>({tg,index,color:TARGET_COLORS[index%TARGET_COLORS.length]}));
-  const sectors=items.map(({tg,color})=>{const from=cursor;cursor+=tg.p;return `${color} ${from}% ${cursor}%`}).join(',');
   const sorted=[...items].sort((a,b)=>b.tg.p-a.tg.p);
+  const circumference=2*Math.PI*65,gap=3.2;
+  let offset=0;
+  const slices=items.map(({tg,color})=>{
+    const length=circumference*tg.p/100-gap;
+    const slice=`<circle cx="90" cy="90" r="65" fill="none" stroke="${color}" stroke-width="25" stroke-dasharray="${length} ${circumference-length}" stroke-dashoffset="${-offset}"/>`;
+    offset+=circumference*tg.p/100;
+    return slice;
+  }).join('');
   const label=sorted.map(({tg})=>`${tg[lang]||tg.en} ${tg.p}%`).join(', ');
   return `<section class="target-breakdown" aria-label="${t('targetDistribution')}">
-    <div class="pie-chart" role="img" aria-label="${label}" style="background:conic-gradient(${sectors})"></div>
+    <div class="pie-chart"><svg viewBox="0 0 180 180" role="img" aria-label="${label}"><circle cx="90" cy="90" r="65" fill="none" stroke="#293236" stroke-width="25"/><g transform="rotate(-90 90 90)">${slices}</g><text class="chart-total" x="90" y="88">100%</text><text class="chart-caption" x="90" y="103">${t('targetTotal')}</text></svg></div>
     <div class="target-legend-wrap">
-      <div class="target-legend-head"><span></span><span data-i="targetLabel">${t('targetLabel')}</span><span data-i="weightLabel">${t('weightLabel')}</span></div>
-      <ul class="target-legend">${sorted.map(({tg,color})=>`<li class="target-item"><span class="target-swatch" style="--segment-color:${color}"></span><span class="target-name">${tg[lang]||tg.en}</span><span class="target-share">${tg.p}%</span></li>`).join('')}</ul>
+      <div class="target-legend-head"><span></span><span></span><span data-i="targetLabel">${t('targetLabel')}</span><span data-i="weightLabel">${t('weightLabel')}</span></div>
+      <ul class="target-legend">${sorted.map(({tg,color})=>`<li class="target-item"><span class="target-swatch" style="--segment-color:${color}"></span><span class="muscle-info">${muscleInfographic(tg.k||tg.en,color)}</span><span class="target-name">${tg[lang]||tg.en}</span><span class="target-share">${tg.p}%</span></li>`).join('')}</ul>
     </div>
   </section>`;
 }
 const I18={
   en:{timer:'Rest',d1:'Back & Biceps',d2:'Chest & Triceps',d3:'Legs',d4:'Shoulders',
       footer:'Form first · Consistency always',rt:'Rest Timer',rs:'Between sets',
-      start:'Start',close:'Close',reset:'Reset',tips:'Form cues',male:'♂ Male',female:'♀ Female',targetLabel:'Muscle target',weightLabel:'Share',targetDistribution:'Muscle target distribution'},
+      start:'Start',close:'Close',reset:'Reset',tips:'Form cues',male:'♂ Male',female:'♀ Female',targetLabel:'Muscle target',weightLabel:'Share',targetDistribution:'Muscle target distribution',targetTotal:'TOTAL'},
   el:{timer:'Διάλειμμα',d1:'Πλάτη & Δικέφαλοι',d2:'Στήθος & Τρικέφαλοι',d3:'Πόδια',d4:'Ώμοι',
       footer:'Τεχνική πρώτα · Συνέπεια πάντα',rt:'Χρονόμετρο',rs:'Μεταξύ σετ',
-      start:'Έναρξη',close:'Κλείσιμο',reset:'Επαναφορά',tips:'Σημεία τεχνικής',male:'♂ Άνδρας',female:'♀ Γυναίκα',targetLabel:'Μυϊκή ομάδα',weightLabel:'Συμμετοχή',targetDistribution:'Κατανομή μυϊκών στόχων'}
+      start:'Έναρξη',close:'Κλείσιμο',reset:'Επαναφορά',tips:'Σημεία τεχνικής',male:'♂ Άνδρας',female:'♀ Γυναίκα',targetLabel:'Μυϊκή ομάδα',weightLabel:'Συμμετοχή',targetDistribution:'Κατανομή μυϊκών στόχων',targetTotal:'ΣΥΝΟΛΟ'}
 };
 
 const D={
