@@ -3,88 +3,188 @@
 // ============================================================
 window.MEDIA = {
 
+  // --- Core ---
+  reverseCrunch: {
+    male:   'media/core/crunches/reverse-crunch-male.webm',
+    female: 'media/core/crunches/reverse-crunch-female.webm'
+  },
+  frontPlank: {
+    male:   'media/core/planks/long-lever-front-plank-male.webm',
+    female: ''
+  },
+  crunch: {
+    male:   '',
+    female: 'media/core/crunches/crunch-female.webm'
+  },
+
   // --- Biceps ---
   dumbbellCurl: {
-    male:   'media/biceps/male/standing inner biceps dumbbell curls.webm',
+    male:   'media/biceps/standing-inner-biceps-dumbbell-curls/standing-inner-biceps-dumbbell-curls-male.webm',
     female: ''
   },
   preacherCurl: {
-    male:   'media/biceps/male/preacher-curls barbell.gif',
+    male:   'media/biceps/preacher-curls-barbell/preacher-curls-barbell-male.gif',
+    female: ''
+  },
+  concentrationCurl: {
+    male:   'media/biceps/concentration-curls/concentration-curls-male.webm',
     female: ''
   },
 
   // --- Chest ---
   benchPress: {
-    male:   'media/chest/male/bench press/flat dumbbells.webm',
-    female: 'media/chest/female/bench press/flat dumbbells.webm'
+    male:   'media/chest/bench-press/flat-dumbbells-male.webm',
+    female: ''
   },
   inclinePress: {
-    male:   'media/chest/male/bench press/incline dumbbells.webm',
-    female: 'media/chest/female/bench press/incline dumbbells.webm'
+    male:   'media/chest/bench-press/incline-dumbbells-male.webm',
+    female: ''
+  },
+  pushUps: {
+    male:   'media/chest/push-ups/push-ups-male.webm',
+    female: ''
   },
 
   // --- Glutes / posterior chain ---
   deadlift: {
-    male:   'media/glutes/male/deadlifts/barbell.webm',
-    female: 'media/glutes/female/deadlifts/barbell.webm'
+    male:   'media/glutes/deadlifts/barbell-male.webm',
+    female: 'media/glutes/deadlifts/barbell-female.webm'
   },
 
   // --- Hamstrings ---
   rdl: {
-    male:   'media/hamstrings/male/romanian-deadlifts/barbell.gif',
-    female: 'media/hamstrings/female/romanian-deadlifts/dumbbells.webm'
+    male:   'media/hamstrings/romanian-deadlifts/barbell-male.gif',
+    female: 'media/hamstrings/romanian-deadlifts/dumbbells-female.webm'
   },
 
   // --- Mid-back ---
   seatedCableRow: {
-    male:   'media/mid-back/male/seated cable rows.webm',
-    female: 'media/mid-back/female/seated cable rows.webm'
+    male:   'media/mid-back/rows/seated-cable-rows-male.webm',
+    female: ''
   },
   bentOverRow: {
-    male:   'media/mid-back/male/bent-over barbell rows.webm',
-    female: 'media/mid-back/female/bent-over barbell rows.webm'
+    male:   'media/mid-back/rows/bent-over-barbell-rows-male.webm',
+    female: ''
+  },
+  pullUps: {
+    male:   'media/mid-back/pull-ups/pull-ups-male.webm',
+    female: ''
+  },
+
+  // --- Glute variations ---
+  gluteKickback: {
+    male:   '',
+    female: 'media/glutes/kickbacks/straight-leg-female.webm'
+  },
+  quadrupedHipExtension: {
+    male:   '',
+    female: 'media/glutes/kickbacks/quadruped-hip-extension-female.webm'
+  },
+  powerClean: {
+    male:   'media/glutes/cleans/barbell-power-clean-male.webm',
+    female: ''
+  },
+  hipThrust: {
+    male:   'media/glutes/hip-thrusts/barbell-female.webm',
+    female: ''
   },
 
   // --- Quads ---
   squat: {
-    male:   'media/quads/male/squats/barbell back squat.webm',
-    female: 'media/quads/female/squats/barbell 1.webm'
+    male:   'media/quads/squats/barbell-back-squat-male.webm',
+    female: 'media/quads/squats/barbell-1-female.webm'
+  },
+  gobletSquat: {
+    male:   '',
+    female: 'media/quads/squats/goblet-squat-female.webm'
+  },
+  sumoSquat: {
+    male:   '',
+    female: 'media/quads/squats/upright-torso-sumo-female.webm'
+  },
+  squatVariation2: {
+    male:   '',
+    female: 'media/quads/squats/barbell-2-female.webm'
+  },
+  squatVariation3: {
+    male:   '',
+    female: 'media/quads/squats/barbell-3-female.webm'
+  },
+  inPlaceLunge: {
+    male:   'media/quads/lunges/in-place-step-male.webm',
+    female: ''
+  },
+  burpee: {
+    male:   'media/quads/burpees/burpee-male.webm',
+    female: ''
+  },
+  machineRowing: {
+    male:   '',
+    female: 'media/quads/rowing/machine-female.webm'
+  },
+  bulgarianSplitSquat: {
+    male:   '',
+    female: 'media/quads/squats/barbell-bulgarian-split-squat-female.webm'
+  },
+  stabilityBallSingleLegSquat: {
+    male:   '',
+    female: 'media/quads/squats/stability-ball-single-leg-squat-female.webm'
   },
   legPress: {
-    male:   'media/quads/male/leg-press/machine.gif',
-    female: 'media/quads/female/leg-press/machine.gif'
+    male:   'media/quads/leg-press/machine-male.gif',
+    female: ''
   },
   lunges: {
-    male:   'media/quads/male/lunges/walking.gif',
-    female: 'media/quads/female/lunges/walking.gif'
+    male:   'media/quads/lunges/walking-male.gif',
+    female: ''
   },
 
   // --- Shoulders ---
   overheadPress: {
-    male:   'media/shoulders/male/overhead-press/standing barbell.webm',
-    female: 'media/shoulders/female/overhead-press/standing barbell.webm'
+    male:   'media/shoulders/overhead-press/standing-barbell-male.webm',
+    female: ''
   },
   seatedPress: {
-    male:   'media/shoulders/male/overhead-press/seated dumbbells.gif',
-    female: 'media/shoulders/female/overhead-press/seated dumbbells.gif'
+    male:   'media/shoulders/overhead-press/seated-dumbbells-male.gif',
+    female: ''
+  },
+  arnoldPress: {
+    male:   'media/shoulders/arnold-press/seated-dumbells-male.webm',
+    female: ''
+  },
+  bentOverLateralRaise: {
+    male:   'media/shoulders/lateral-raises/bent-over-dumbbells-male.webm',
+    female: ''
   },
   lateralRaises: {
-    male:   'media/shoulders/male/lateral-raises/standing dumbbells.webm',
-    female: 'media/shoulders/female/lateral-raises/standing dumbbells.webm'
+    male:   'media/shoulders/lateral-raises/standing-dumbbells-male.webm',
+    female: 'media/shoulders/lateral-raises/standing-dumbbells-female.webm'
   },
   facePulls: {
-    male:   'media/shoulders/male/face-pulls/standing cable.gif',
-    female: 'media/shoulders/female/face-pulls/standing cable.gif'
+    male:   'media/shoulders/face-pulls/standing-cable-male.gif',
+    female: ''
   },
 
   // --- Triceps ---
   pushdown: {
-    male:   'media/triceps/male/pushdowns/standing cable.gif',
-    female: 'media/triceps/female/pushdowns/standing cable.gif'
+    male:   'media/triceps/pushdowns/standing-cable-male.gif',
+    female: ''
   },
   overheadExtension: {
-    male:   'media/triceps/male/overhead-extensions/dumbbell.gif',
-    female: 'media/triceps/female/overhead-extensions/dumbbell.gif'
+    male:   'media/triceps/overhead-extensions/dumbbell-male.gif',
+    female: ''
+  },
+  benchDips: {
+    male:   'media/triceps/dips/bench-dips-male.webm',
+    female: ''
+  },
+  forearmPushUp: {
+    male:   'media/triceps/forearm-push-ups/forearm-push-up-male.webm',
+    female: ''
+  },
+  standingCalfRaise: {
+    male:   '',
+    female: 'media/calves/dumbbell-standing-calf-raise/dumbbell-standing-calf-raise-female.webm'
   }
 
 };
