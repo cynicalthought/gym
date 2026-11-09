@@ -3,142 +3,173 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-<title>4-Day Split</title>
+<title>Unbreakable Training | 4-Day Split</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
 :root {
-  --bg:#060608; --surface:#0e0e12; --card:#141418;
-  --line:rgba(255,255,255,.08); --text:#f5f5f7; --mute:#9a9aa8; --faint:#6a6a78;
-  --accent:#ff3b3b; --accent2:#ff6b4a; --glow:rgba(255,59,59,.35);
+  --bg:#0b1113; --surface:#121a1d; --card:#151f22;
+  --line:rgba(213,231,226,.11); --text:#f0f5f3; --mute:#a5b4b0; --faint:#80918c;
+  --accent:#79d9bb; --accent2:#a4e8d2; --glow:rgba(121,217,187,.18);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{
-  font-family:'Instrument Sans',system-ui,sans-serif;
+  font-family:'Inter',system-ui,sans-serif;
   background:var(--bg);color:var(--text);min-height:100dvh;line-height:1.5;
   background-image:
-    radial-gradient(ellipse 100% 60% at 80% -10%, rgba(255,59,59,.18), transparent 50%),
-    radial-gradient(ellipse 50% 40% at 0% 80%, rgba(255,80,40,.06), transparent 45%);
+    radial-gradient(ellipse 72% 40% at 50% -18%,rgba(121,217,187,.09),transparent 70%),
+    radial-gradient(ellipse 45% 30% at 100% 82%,rgba(91,121,111,.07),transparent 72%);
 }
 
 /* Top bar */
 .top{
   position:sticky;top:0;z-index:40;
   display:flex;align-items:center;justify-content:space-between;
-  padding:.9rem 1.4rem;max-width:1100px;margin:0 auto;
-  background:linear-gradient(to bottom, rgba(6,6,8,.95) 60%, transparent);
+  max-width:1180px;margin:0 auto;padding:1rem 1.5rem;
+  background:rgba(11,17,19,.92);border-bottom:1px solid var(--line);backdrop-filter:blur(16px);
 }
-.brand{font-family:'Instrument Sans',system-ui,sans-serif;font-weight:700;font-size:1.1rem;letter-spacing:.015em}
-.brand em{color:var(--accent);font-style:normal}
-.top-actions{display:flex;align-items:center;gap:.5rem}
-.flag-btn{
-  width:40px;height:40px;border-radius:12px;border:1px solid var(--line);
-  background:rgba(255,255,255,.03);cursor:pointer;font-size:1.25rem;
-  display:grid;place-items:center;transition:.15s;line-height:1;
+.brand{display:flex;align-items:center;gap:.65rem;color:var(--text);text-decoration:none;font-family:'Manrope','Inter',sans-serif;font-size:.92rem;font-weight:800;letter-spacing:.09em}
+.brand-mark{width:36px;height:36px;display:grid;place-items:center;border:1px solid rgba(121,217,187,.45);border-radius:11px;color:var(--accent);font-size:1.05rem;letter-spacing:0;background:rgba(121,217,187,.06)}
+.brand-mark svg{width:22px;height:22px}
+.brand-mark path{fill:none;stroke:var(--accent);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.brand-sub{display:block;color:var(--faint);font-size:.58rem;letter-spacing:.2em;font-weight:600;line-height:1.2}
+.top-actions{display:flex;align-items:center;gap:.75rem}
+.language-control{display:flex;align-items:center}
+.language-select{
+  appearance:none;min-width:68px;padding:.55rem 1.8rem .55rem .7rem;border:1px solid var(--line);border-radius:9px;
+  background:#171e22;color:var(--text);font:600 .78rem 'Inter',sans-serif;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='m2 4 4 4 4-4' fill='none' stroke='%23a4b0b7' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right .6rem center;
 }
-.flag-btn:hover,.flag-btn.on{border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.06)}
+.language-select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.language-select option{background:#171e22;color:var(--text)}
 .timer-btn{
-  padding:.55rem 1.1rem;border-radius:12px;border:none;cursor:pointer;
-  background:linear-gradient(135deg,var(--accent),#ff5533);color:#fff;
-  font-weight:600;font-size:.82rem;box-shadow:0 4px 18px var(--glow);
+  padding:.58rem .9rem;border:1px solid rgba(121,217,187,.25);border-radius:10px;
+  background:#182421;color:#d0f1e5;font-weight:650;font-size:.8rem;cursor:pointer;
 }
 
 /* Main */
-.main{max-width:1100px;margin:0 auto;padding:0 1.4rem 4rem}
+.main{max-width:1180px;margin:0 auto;padding:1.4rem 1.5rem 4rem}
 
-/* Day chooser — large cards, not pills/dropdowns */
-.days{
-  display:grid;grid-template-columns:repeat(4,1fr);gap:.85rem;
-  margin:1.2rem 0 2rem;
-}
+/* Day chooser */
+.days{display:grid;grid-template-columns:repeat(4,1fr);gap:.85rem;margin:1.2rem 0 2rem}
 @media(max-width:720px){.days{grid-template-columns:1fr 1fr}}
 .day-card{
-  position:relative;padding:1.35rem 1.1rem;border-radius:20px;
-  background:var(--card);border:1px solid var(--line);
-  cursor:pointer;transition:.22s;overflow:hidden;text-align:left;
+  position:relative;padding:1.1rem 1rem;border-radius:14px;
+  background:linear-gradient(145deg,rgba(255,255,255,.025),transparent),var(--card);border:1px solid var(--line);
+  cursor:pointer;transition:.22s;overflow:hidden;text-align:left;box-shadow:0 10px 30px rgba(0,0,0,.12);
 }
-.day-card:hover{border-color:rgba(255,255,255,.14);transform:translateY(-2px)}
+.day-card:hover{border-color:rgba(213,231,226,.2);transform:translateY(-2px)}
 .day-card.on{
-  border-color:rgba(255,59,59,.45);
-  background:linear-gradient(160deg,rgba(255,59,59,.14),var(--card));
-  box-shadow:0 0 0 1px rgba(255,59,59,.15), 0 12px 40px rgba(255,59,59,.08);
+  border-color:rgba(121,217,187,.48);
+  background:linear-gradient(145deg,rgba(121,217,187,.12),rgba(121,217,187,.035)),var(--card);
+  box-shadow:inset 3px 0 var(--accent),0 12px 30px rgba(0,0,0,.16);
 }
-.day-card .n{
-  font-family:'Instrument Sans',system-ui,sans-serif;font-weight:600;font-size:1.5rem;
-  color:rgba(255,255,255,.08);line-height:1;margin-bottom:.35rem;
-}
-.day-card.on .n{color:rgba(255,59,59,.25)}
-.day-card .label{font-weight:700;font-size:.95rem;letter-spacing:-.01em}
+.day-card .n{font-family:'Manrope','Inter',sans-serif;font-weight:600;font-size:1.35rem;color:#728078;line-height:1;margin-bottom:.35rem}
+.day-card.on .n{color:var(--accent)}
+.day-card .label{font:650 .92rem 'Manrope','Inter',sans-serif;letter-spacing:-.01em}
 .day-card .count{font-size:.75rem;color:var(--faint);margin-top:.25rem}
 .day-card.on .label{color:#fff}
 
-/* Exercise grid */
+/* Exercise grid & library */
 .ex-grid{display:grid;grid-template-columns:1fr;gap:1rem}
-@media(min-width:900px){.ex-grid{grid-template-columns:1fr 1fr}}
+.view-tabs{display:flex;gap:.5rem;margin:.2rem 0 1.2rem;border-bottom:1px solid var(--line)}
+.view-tab{padding:.7rem .95rem;border:0;border-bottom:2px solid transparent;background:none;color:var(--mute);font:600 .88rem 'Inter',sans-serif;cursor:pointer}
+.view-tab.on{color:var(--accent);border-bottom-color:var(--accent)}
+.library-heading{margin:0 0 1rem}
+.library-heading h1{font:700 1.8rem/1.2 'Manrope','Inter',sans-serif;letter-spacing:-.04em;color:var(--text)}
+.library-heading p{color:var(--mute);font-size:.9rem;margin-top:.35rem}
+.library-tools{display:grid;gap:.75rem;margin:1.2rem 0 1.4rem}
+.library-search{position:relative}
+.library-search input{width:100%;padding:.85rem 1rem .85rem 2.65rem;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--text);font:500 .9rem 'Inter',sans-serif;outline:none}
+.library-search input:focus{border-color:rgba(121,217,187,.6);box-shadow:0 0 0 3px rgba(121,217,187,.08)}
+.library-search::before{content:'⌕';position:absolute;left:1rem;top:.55rem;color:var(--faint);font-size:1.3rem}
+.category-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.55rem}
+.category-link{display:flex;align-items:center;gap:.65rem;padding:.65rem;border:1px solid var(--line);border-radius:12px;background:linear-gradient(145deg,rgba(255,255,255,.035),transparent),var(--surface);color:var(--text);text-align:left;cursor:pointer;transition:.16s}
+.category-link:hover,.category-link:focus-visible,.category-link.selected{border-color:rgba(121,217,187,.5);background:rgba(121,217,187,.09);outline:none}
+.library-prompt{padding:1.2rem;border:1px dashed var(--line);border-radius:12px;color:var(--faint);font-size:.84rem;text-align:center}
+.category-icon{width:38px;height:38px;flex:0 0 38px;border-radius:10px;background:rgba(121,217,187,.09);display:grid;place-items:center}
+.category-icon svg{width:29px;height:29px}
+.category-link-text{min-width:0}
+.category-link-name{display:block;font-size:.78rem;font-weight:650}
+.category-link-count{display:block;color:var(--faint);font-size:.68rem;margin-top:.1rem}
+.library-results{font-size:.74rem;color:var(--faint);margin-top:-.25rem}
+.library-group{margin:.65rem 0;border:1px solid var(--line);border-radius:13px;background:rgba(255,255,255,.015);overflow:hidden;scroll-margin-top:1rem}
+.library-results-group{border:0;background:none;overflow:visible}
+.library-full-heading{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin:.25rem 0 1rem;padding:.8rem 1rem;border:1px solid var(--line);border-radius:13px;background:rgba(255,255,255,.025);font-family:'Manrope','Inter',sans-serif}
+.library-full-heading .library-group-title{font-size:1rem;font-weight:650}
+.library-group>summary,.library-exercise>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.library-group>summary::-webkit-details-marker,.library-exercise>summary::-webkit-details-marker{display:none}
+.library-group>summary{padding:.9rem 1rem;font-size:.96rem;font-weight:650;font-family:'Manrope','Inter',sans-serif}
+.library-group>summary::after,.library-exercise>summary::after{content:'+';color:var(--accent);font-size:1.1rem;font-weight:500}
+.library-group[open]>summary::after,.library-exercise[open]>summary::after{content:'−'}
+.library-count{color:var(--faint);font-size:.75rem;font-weight:500;margin-left:auto}
+.library-group-title{display:flex;align-items:center;gap:.7rem}
+.library-group-title .category-icon{width:36px;height:36px}
+@media(max-width:560px){.category-nav{grid-template-columns:repeat(2,minmax(0,1fr))}.library-exercise-meta{gap:.35rem;font-size:.68rem}.library-exercise>summary{gap:.5rem}.library-group>summary{padding:.75rem}}
+.library-exercises{padding:0 .65rem .65rem}
+.library-exercise{border-top:1px solid var(--line)}
+.library-exercise>summary{padding:.8rem .45rem;font-size:.87rem}
+.library-exercise-name{font-weight:600}
+.library-exercise-meta{display:flex;align-items:center;gap:.65rem;color:var(--faint);font-size:.75rem}
+.library-exercise .ex{margin:0 .1rem .75rem}
 
 .ex{
-  background:var(--card);border:1px solid var(--line);border-radius:22px;
-  overflow:hidden;display:flex;flex-direction:column;
-  transition:border-color .2s;
+  background:linear-gradient(145deg,rgba(255,255,255,.025),transparent 42%),var(--card);border:1px solid var(--line);border-radius:20px;
+  overflow:hidden;display:flex;flex-direction:column;box-shadow:0 18px 52px rgba(0,0,0,.19);
+  transition:border-color .2s,transform .2s,box-shadow .2s;
 }
-.ex:hover{border-color:rgba(255,255,255,.12)}
-.ex-head{padding:1.2rem 1.25rem 1rem}
+.ex:hover{border-color:rgba(213,231,226,.2);box-shadow:0 22px 58px rgba(0,0,0,.25);transform:translateY(-1px)}
+.ex-head{padding:1.35rem 1.45rem 1.1rem}
 .ex-head .row{display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem}
-.ex-name{font-family:'Instrument Sans',system-ui,sans-serif;font-weight:600;font-size:1.05rem;letter-spacing:-.01em}
+.ex-name{font-family:'Manrope','Inter',sans-serif;font-weight:700;font-size:1.16rem;letter-spacing:-.02em}
 .ex-sets{
-  flex-shrink:0;font-size:.7rem;font-weight:700;color:var(--accent);
-  background:rgba(255,59,59,.12);padding:.25rem .55rem;border-radius:8px;
+  flex-shrink:0;font-size:.72rem;font-weight:700;letter-spacing:.02em;color:#d0f1e5;
+  background:rgba(121,217,187,.11);border:1px solid rgba(121,217,187,.15);padding:.3rem .62rem;border-radius:9px;
 }
-.ex-muscles{font-size:.8rem;color:var(--faint);margin-top:.3rem}
+.ex-muscles{font-size:.86rem;color:var(--mute);margin-top:.35rem;letter-spacing:.005em}
 
-/* Muscle distribution: a labeled donut with matching anatomy thumbnails */
-.target-breakdown{display:grid;grid-template-columns:minmax(135px,.82fr) minmax(0,1.3fr);gap:1rem;align-items:center;padding:0 1.25rem 1.1rem}
-.pie-chart{width:min(100%,174px);aspect-ratio:1;justify-self:center;filter:drop-shadow(0 8px 18px rgba(0,0,0,.22))}
+/* Visual row */
+.exercise-visual-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;align-items:stretch;padding:0 1.15rem 1rem}
+.exercise-visual-row .target-breakdown,.exercise-visual-row .media-area{min-width:0;min-height:360px;padding:1rem;border:1px solid rgba(213,231,226,.12);border-radius:18px;background:linear-gradient(150deg,rgba(255,255,255,.025),transparent 55%),var(--surface);box-shadow:inset 0 1px rgba(255,255,255,.025)}
+.exercise-visual-row .target-breakdown{display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:.55rem;padding:1rem}
+.exercise-visual-row .pie-chart{width:100%;aspect-ratio:760/460}
+
+/* Forced readable chart callout text styling */
+.chart-callout-name{fill:var(--text);font-family:'Inter',sans-serif;font-size:18px !important;font-weight:700;letter-spacing:-.01em}
+.chart-callout-share{fill:var(--accent2);font-family:'Inter',sans-serif;font-size:16px !important;font-weight:800}
+
+.exercise-visual-row .media-area{display:flex;flex-direction:column;gap:.55rem;margin:0}
+.visual-panel-title{flex:0 0 auto;font:700 .72rem 'Manrope','Inter',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+.exercise-visual-row .stage{flex:1;min-height:230px;max-height:270px;aspect-ratio:1;width:100%;border-radius:12px;border-color:rgba(213,231,226,.12)}
+.form-cues-panel{grid-column:1/-1;display:grid;grid-template-columns:1fr;gap:.7rem;min-width:0;padding:.85rem 1rem;border:1px solid rgba(213,231,226,.12);border-radius:16px;background:linear-gradient(150deg,rgba(255,255,255,.025),transparent 55%),var(--surface)}
+.form-cues-panel h3{color:var(--accent2);padding-bottom:.55rem;border-bottom:1px solid var(--line)}
+.form-cue-list{list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1rem;margin:0}
+.form-cue-list li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:.45rem;align-items:start;color:var(--mute);font-size:.82rem;line-height:1.45}
+.cue-index{color:var(--accent);font:700 .69rem 'Inter',sans-serif;letter-spacing:.05em;padding-top:.16rem}
+@media(max-width:620px){.exercise-visual-row{grid-template-columns:1fr;padding:0 .8rem 1rem}.form-cue-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:.7rem}}
+.target-breakdown{display:flex;align-items:center;justify-content:center;padding:.6rem}
+.pie-chart{width:100%;aspect-ratio:760/460;filter:drop-shadow(0 12px 18px rgba(0,0,0,.24))}
 .pie-chart svg{display:block;width:100%;height:100%;overflow:visible}
-.chart-total{fill:var(--text);font-family:'Instrument Sans',sans-serif;font-size:21px;font-weight:600;text-anchor:middle}
-.chart-caption{fill:var(--faint);font-family:'Instrument Sans',sans-serif;font-size:7px;font-weight:700;letter-spacing:1.3px;text-anchor:middle}
-.target-legend{list-style:none;display:flex;flex-direction:column;min-width:0}
-.target-legend-head,.target-item{display:grid;grid-template-columns:10px 36px minmax(0,1fr) auto;align-items:center;gap:.45rem}
-.target-legend-head{padding:0 0 .35rem;color:var(--faint);font-size:.61rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
-.target-legend-head span:last-child{min-width:3.1rem;text-align:right}
-.target-item{min-height:42px;padding:.28rem 0;border-bottom:1px solid rgba(226,235,240,.07)}
-.target-item:last-child{border-bottom:0}
-.target-swatch{width:8px;height:8px;border-radius:3px;background:var(--segment-color);box-shadow:0 0 6px rgba(255,255,255,.10)}
-.muscle-info{display:block;width:34px;height:34px}
-.muscle-info svg{display:block;width:100%;height:100%}
-.target-name{min-width:0;color:var(--text);font-size:.79rem;font-weight:550;line-height:1.25;overflow-wrap:anywhere}
-.target-share{min-width:3.1rem;text-align:right;color:var(--mute);font-size:.78rem;font-weight:600;font-variant-numeric:tabular-nums}
-
-/* Tips */
-.tips{padding:0 1.25rem 1rem}
-.tips h4{
-  font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
-  color:var(--accent);margin-bottom:.45rem;
-}
-.tips ul{list-style:none;display:flex;flex-direction:column;gap:.3rem}
-.tips li{font-size:.84rem;color:var(--mute);padding-left:.9rem;position:relative}
-.tips li::before{
-  content:"";position:absolute;left:0;top:.55rem;
-  width:5px;height:5px;border-radius:50%;background:var(--accent);
-}
+.pie-center-badge{filter:drop-shadow(0 3px 4px rgba(0,0,0,.42))}
+.pie-center-rim{stroke:rgba(229,241,236,.38);stroke-width:1}
+.pie-center-face{stroke:rgba(121,217,187,.32);stroke-width:1}
+.pie-center-mark{fill:none;stroke:#d8f2e8;stroke-width:4.4;stroke-linecap:round;stroke-linejoin:round}
 
 /* Media */
 .media-area{padding:0 1.25rem 1.25rem;margin-top:auto}
-.g-row{display:flex;gap:.4rem;margin-bottom:.65rem}
+.g-row{display:flex;gap:.4rem;margin-top:.65rem}
 .g-btn{
-  flex:1;padding:.5rem;border-radius:12px;border:1px solid var(--line);
+  flex:1;padding:.5rem;border-radius:9px;border:1px solid var(--line);
   background:rgba(255,255,255,.03);color:var(--mute);
   font-size:.8rem;font-weight:600;cursor:pointer;transition:.15s;
 }
 .g-btn:hover{color:var(--text)}
-.g-btn.on{
-  background:linear-gradient(135deg,var(--accent),#ff5533);
-  border-color:transparent;color:#fff;box-shadow:0 2px 12px var(--glow);
-}
+.g-btn.on{background:rgba(121,217,187,.12);border-color:rgba(121,217,187,.4);color:#d8f5e9}
 .stage{
   width:100%;aspect-ratio:9/16;max-height:460px;
-  background:#000;border-radius:16px;overflow:hidden;border:1px solid var(--line);
+  background:#000;border-radius:12px;overflow:hidden;border:1px solid var(--line);
 }
 .stage video,.stage img{width:100%;height:100%;object-fit:contain;display:block}
 
@@ -147,7 +178,7 @@ body{
 @keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
 footer{
-  max-width:1100px;margin:0 auto;padding:1.5rem 1.4rem 2.5rem;
+  max-width:1180px;margin:0 auto;padding:1.5rem 1.5rem 2.5rem;
   text-align:center;color:var(--faint);font-size:.78rem;border-top:1px solid var(--line);
 }
 
@@ -158,10 +189,11 @@ footer{
 }
 .overlay.show{display:flex}
 .modal{
-  background:#111114;border:1px solid var(--line);border-radius:24px;
+  background:var(--surface);border:1px solid var(--line);border-radius:20px;
   padding:1.8rem 1.5rem;width:100%;max-width:320px;text-align:center;
+  box-shadow:0 24px 80px rgba(0,0,0,.38);
 }
-.modal h3{font-family:'Instrument Sans',system-ui,sans-serif;font-size:1.1rem;font-weight:600;margin-bottom:.2rem}
+.modal h3{font-family:'Manrope','Inter',sans-serif;font-size:1.1rem;font-weight:600;margin-bottom:.2rem}
 .modal p{color:var(--faint);font-size:.8rem;margin-bottom:1rem}
 .presets{display:flex;gap:.35rem;justify-content:center;margin-bottom:.7rem}
 .pre{
@@ -170,60 +202,21 @@ footer{
 }
 .pre.on{border-color:var(--accent);color:var(--accent)}
 .clock{
-  font-family:'Instrument Sans',system-ui,sans-serif;font-weight:600;font-size:3.2rem;
-  background:linear-gradient(120deg,var(--accent),var(--accent2));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  margin:.3rem 0 1.1rem;
+  font-family:'Manrope','Inter',sans-serif;font-weight:600;font-size:3.2rem;
+  color:var(--accent);margin:.3rem 0 1.1rem;
 }
 .mbtns{display:flex;gap:.45rem}
 .mbtns button{
   flex:1;padding:.7rem;border-radius:12px;border:1px solid var(--line);
   background:rgba(255,255,255,.04);color:var(--mute);font-weight:600;font-size:.85rem;cursor:pointer;
 }
-.mbtns button.main{background:linear-gradient(135deg,var(--accent),#ff5533);border:none;color:#fff}
-
-/* Refined visual system */
-:root {
-  --bg:#101418; --surface:#171d22; --card:#1b2228;
-  --line:rgba(226,235,240,.10); --text:#edf2f4; --mute:#a4b0b7; --faint:#7e8b93;
-  --accent:#65b7a4; --accent2:#8bc8b8; --glow:rgba(101,183,164,.16);
-}
-body { background-image:radial-gradient(ellipse 70% 35% at 50% -18%,rgba(101,183,164,.10),transparent 70%); }
-.top { max-width:1180px; padding:1rem 1.5rem; background:rgba(16,20,24,.94); border-bottom:1px solid var(--line); backdrop-filter:blur(14px); }
-.brand { display:flex;align-items:center;gap:.65rem;color:var(--text);text-decoration:none;font-family:'Instrument Sans',sans-serif;font-size:.9rem;font-weight:700;letter-spacing:.08em; }
-.brand-mark { width:34px;height:34px;display:grid;place-items:center;border:1px solid rgba(101,183,164,.5);border-radius:10px;color:var(--accent);font-size:1.05rem;letter-spacing:0; }
-.brand-sub { display:block;color:var(--faint);font-size:.56rem;letter-spacing:.18em;font-weight:600;line-height:1.2; }
-.main { max-width:1180px;padding:1.4rem 1.5rem 4rem; }
-.top-actions { gap:.75rem; }
-.language-control { display:flex;align-items:center; }
-
-.language-select { appearance:none;min-width:68px;padding:.55rem 1.8rem .55rem .7rem;border:1px solid var(--line);border-radius:9px;background:#171e22;color:var(--text);font:600 .78rem 'Instrument Sans',sans-serif;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='m2 4 4 4 4-4' fill='none' stroke='%23a4b0b7' stroke-width='1.5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .6rem center; }
-.language-select:focus-visible { outline:2px solid var(--accent);outline-offset:2px; }
-.language-select option { background:#171e22;color:var(--text); }
-.timer-btn { padding:.58rem .9rem;border:1px solid rgba(101,183,164,.25);border-radius:10px;background:#20302d;color:#b9e2d6;box-shadow:none;font-size:.8rem; }
-.day-card { padding:1.1rem 1rem;border-radius:14px; }
-.day-card.on { border-color:rgba(101,183,164,.48);background:#202a2a;box-shadow:inset 3px 0 var(--accent); }
-.day-card .n { font-family:'Instrument Sans',sans-serif;font-size:1.4rem;font-weight:600;color:#728078; }
-.day-card.on .n { color:var(--accent); }
-.day-card .label { font-size:.9rem; }
-.ex { border-radius:16px; }
-.ex-name { font-family:'Instrument Sans',sans-serif;font-weight:650;letter-spacing:-.015em;font-size:1.08rem; }
-.ex-sets { color:#b9e2d6;background:rgba(101,183,164,.11); }
-.tips h4 { color:var(--accent); }
-.tips li::before { background:var(--accent); }
-.g-btn { border-radius:9px; }
-.g-btn.on { background:#29423c;border-color:rgba(101,183,164,.35);color:#c5e8dd;box-shadow:none; }
-.stage { border-radius:12px; }
-.modal { border-radius:18px; }
-.clock { font-family:'Instrument Sans',sans-serif;background:none;-webkit-text-fill-color:var(--accent);color:var(--accent); }
-.mbtns button.main { background:#315d52; }
-@media(max-width:520px) { .target-breakdown { grid-template-columns:minmax(96px,.75fr) minmax(0,1.4fr);gap:.75rem;padding-left:.8rem;padding-right:.8rem; }.pie-chart { width:min(100%,132px); } .top { padding:.75rem 1rem; }.main { padding:1rem 1rem 3rem; }.brand { gap:.45rem; }.brand-mark { width:30px;height:30px; }.top-actions { gap:.45rem; }.timer-btn { padding:.52rem .68rem; } }
+.mbtns button.main{background:#264d40;border:none;color:#fff}
 </style>
 </head>
 <body>
 
 <header class="top">
-  <a class="brand" href="#" aria-label="Apex training"><span class="brand-mark">A</span><span>APEX<span class="brand-sub">TRAINING</span></span></a>
+  <a class="brand" href="#" aria-label="Unbreakable Training"><span class="brand-mark"><svg viewBox="0 0 36 36" aria-hidden="true"><path d="M10 8v11c0 10 16 10 16 0V8"/></svg></span><span>UNBREAKABLE<span class="brand-sub">TRAINING</span></span></a>
   <div class="top-actions">
     <label class="language-control" aria-label="Language">
       <select class="language-select" id="languageSelect" aria-label="Language">
@@ -236,6 +229,11 @@ body { background-image:radial-gradient(ellipse 70% 35% at 50% -18%,rgba(101,183
 </header>
 
 <main class="main">
+  <nav class="view-tabs" aria-label="Workout views">
+    <button class="view-tab on" id="scheduleTab" data-i="schedule">Schedule</button>
+    <button class="view-tab" id="libraryTab" data-i="library">Exercise library</button>
+  </nav>
+  <section id="scheduleView">
   <div class="days" id="days">
     <button class="day-card on" data-d="1">
       <div class="n">01</div>
@@ -263,6 +261,13 @@ body { background-image:radial-gradient(ellipse 70% 35% at 50% -18%,rgba(101,183
   <div class="panel" id="p2"><div class="ex-grid" id="e2"></div></div>
   <div class="panel" id="p3"><div class="ex-grid" id="e3"></div></div>
   <div class="panel" id="p4"><div class="ex-grid" id="e4"></div></div>
+  </section>
+  <section id="libraryView" hidden>
+    <div class="library-heading"><h1 data-i="libraryTitle">All exercises</h1><p data-i="libraryDescription">Browse every exercise in your plan and watch its demonstration.</p></div>
+    <div class="library-tools"><label class="library-search"><input id="exerciseSearch" type="search" placeholder="Search exercises or muscles" autocomplete="off" aria-label="Search exercises"></label><nav class="category-nav" id="categoryNav" aria-label="Muscle groups"></nav><p class="library-results" id="libraryResults" aria-live="polite"></p></div>
+    <p class="library-prompt" id="libraryPrompt" data-i="libraryPrompt">Choose a muscle group above or search for an exercise.</p>
+    <div id="allExercises"></div>
+  </section>
 </main>
 
 <footer data-i="footer">Form first · Consistency always</footer>
@@ -286,249 +291,9 @@ body { background-image:radial-gradient(ellipse 70% 35% at 50% -18%,rgba(101,183
   </div>
 </div>
 
+<!-- Script inclusions -->
 <script src="media-paths.js"></script>
-<script>
-const TARGET_COLORS=['#69c4ad','#91a9e5','#e3b978','#c999d2','#e48979'];
-const MUSCLE_BASE={
-  front:`<g fill="#47514f" stroke="#929e98" stroke-width="1.1" stroke-linejoin="round"><path d="M36 10v6l-8 3-6 3-4 8 4 9 5 4 1 13 7 7 8 0 7-7 1-13 5-4 4-9-4-8-6-3-8-3v-6Z"/><path d="M22 22 16 24l-5 8-2 10 4 3 5-7 4-8Zm36 0 6 2 5 8 2 10-4 3-5-7-4-8Z"/><circle cx="40" cy="6" r="5"/></g><path d="M40 17v39M26 28q6 3 14 2m14-2q-6 3-14 2M29 43q5 2 11 1m11-1q-5 2-11 1" fill="none" stroke="#9da8a2" stroke-width=".8"/>`,
-  back:`<g fill="#47514f" stroke="#929e98" stroke-width="1.1" stroke-linejoin="round"><path d="M36 10v6l-8 3-6 3-4 8 4 9 5 4 1 13 7 7 8 0 7-7 1-13 5-4 4-9-4-8-6-3-8-3v-6Z"/><path d="M22 22 16 24l-5 8-2 10 4 3 5-7 4-8Zm36 0 6 2 5 8 2 10-4 3-5-7-4-8Z"/><circle cx="40" cy="6" r="5"/></g><path d="M40 17v40M25 28q7 5 15 3m15-3q-7 5-15 3M28 45q5 3 12 2m12-2q-5 3-12 2" fill="none" stroke="#9da8a2" stroke-width=".8"/>`,
-  lowerFront:`<g fill="#47514f" stroke="#929e98" stroke-width="1.1" stroke-linejoin="round"><path d="M25 3q15 5 30 0l4 9-5 9-3 17-2 30-5 1-4-28-4 28-5-1-2-30-3-17-5-9Z"/><path d="M25 3q-7 5-7 12l6 8 8-4 4-14Zm30 0q7 5 7 12l-6 8-8-4-4-14Z"/></g><path d="M40 13v34M28 27q6 3 12 2m12-2q-6 3-12 2" fill="none" stroke="#9da8a2" stroke-width=".8"/>`,
-  lowerBack:`<g fill="#47514f" stroke="#929e98" stroke-width="1.1" stroke-linejoin="round"><path d="M25 3q15 5 30 0l4 9-5 9-3 17-2 30-5 1-4-28-4 28-5-1-2-30-3-17-5-9Z"/><path d="M25 3q-7 5-7 12l6 8 8-4 4-14Zm30 0q7 5 7 12l-6 8-8-4-4-14Z"/></g><path d="M40 12v35M28 31q6 5 12 3m12-3q-6 5-12 3" fill="none" stroke="#9da8a2" stroke-width=".8"/>`
-};
-const MUSCLE_MAP={
-  glutes:['lowerBack','M26 8q5-5 14-2l-1 14q-8 3-13-2-3-5 0-10Zm28 0q-5-5-14-2l1 14q8 3 13-2 3-5 0-10Z','M28 9q4 6 10 8m-7-11q4 5 8 7m12-4q-4 6-10 8m7-11q-4 5-8 7'],
-  hamstrings:['lowerBack','M29 22q5 1 11-2l-1 23-4 23-4 1-2-27Zm22 0q-5 1-11-2l1 23 4 23 4 1 2-27Z','M32 25q5 12 3 31m12-31q-5 12-3 31'],
-  quads:['lowerFront','M28 20q5 2 12-1l-1 25-4 22-4 1-3-26Zm24 0q-5 2-12-1l1 25 4 22 4 1 3-26Z','M31 24q6 12 5 31m12-31q-6 12-5 31'],
-  erectors:['back','M37 19q3-3 6 0l1 40-4 5-4-5Z','M39 23v34m3-34v34'],
-  traps:['back','M34 17q6 3 12 0l9 7-7 13-8-4-8 4-7-13Z','M35 20l5 12m5-12-5 12'],
-  lats:['back','M27 26q6 4 13 7l-1 24-12-5-5-15Zm26 0q-6 4-13 7l1 24 12-5 5-15Z','M29 31q5 10 8 22m14-22q-5 10-8 22'],
-  rhomboids:['back','M36 27l4 4 4-4 7 8-7 8-4-3-4 3-7-8Z','M31 34l7 3m11-3-7 3m-6-5 4 10'],
-  biceps:['front','M17 26q3-5 6 0l-2 12-4 2-3-4Zm40 0q-3-5-6 0l2 12 4 2 3-4Z','M16 29l4 7m38-7-4 7'],
-  brachialis:['front','M20 29q3-3 5 1l-2 9-4-1-2-4Zm40 0q-3-3-5 1l2 9 4-1 2-4Z','M19 31l4 6m38-6-4 6'],
-  forearms:['front','M12 37l5 1-2 15-4 1-2-5Zm56 0-5 1 2 15 4 1 2-5Z','M13 40l2 11m52-11-2 11'],
-  chest:['front','M27 23q6-5 13 0l-1 12q-7 4-12-1-4-5 0-11Zm26 0q-6-5-13 0l1 12q7 4 12-1 4-5 0-11Z','M29 26q5 2 9 7m12-5q-5 2-9 7'],
-  upperchest:['front','M27 23q6-5 13 0l-1 7q-7 2-12-1-3-3 0-6Zm26 0q-6-5-13 0l1 7q7 2 12-1 3-3 0-6Z','M30 24l7 4m13-4-7 4'],
-  triceps:['back','M16 25q4-3 7 1l-2 13-5 2-3-6Zm48 0q-4-3-7 1l2 13 5 2 3-6Z','M16 29l5 8m43-8-5 8'],
-  frontdelts:['front','M21 19q5-5 9 1l-2 9q-6 2-9-3-2-4 2-7Zm44 0q-5-5-9 1l2 9q6 2 9-3 2-4-2-7Z','M22 21l6 5m37-5-6 5'],
-  sidedelts:['front','M18 20q5-5 9-1l-2 10-6 1-4-5Zm50 0q-5-5-9-1l2 10 6 1 4-5Z','M17 22l6 5m47-5-6 5'],
-  reardelts:['back','M21 19q5-5 9 1l-2 9q-6 2-9-3-2-4 2-7Zm44 0q-5-5-9 1l2 9q6 2 9-3 2-4-2-7Z','M22 21l6 5m37-5-6 5'],
-  core:['front','M37 36h7v7h-7zm0 8h7v7h-7zm0 8h7v7h-7zm-8-16h7v7h-7zm0 8h7v7h-7zm0 8h7v7h-7z','M29 42h7m1 0h7m-15 8h7m1 0h7'],
-  rotator:['back','M20 20q5-4 8 1l-2 7-7 1-3-4Zm40 0q-5-4-8 1l2 7 7 1 3-4Z','M19 22l6 4m37-4-6 4'],
-  anconeus:['back','M14 38l5-2 4 5-3 6-6-2Zm52 0-5-2-4 5 3 6 6-2Z','M15 40l6 4m45-4-6 4']
-};
-function muscleInfographic(key,color){
-  const [view,shape,fibers]=MUSCLE_MAP[key]||MUSCLE_MAP.chest;
-  return `<svg viewBox="0 0 80 72" role="img" aria-label="${key} muscle map"><g>${MUSCLE_BASE[view]}</g><path d="${shape}" fill="${color}" stroke="#f2c3ae" stroke-width="1.1" stroke-linejoin="round"/><path d="${fibers}" fill="none" stroke="#593c42" stroke-width=".8" stroke-linecap="round" opacity=".85"/></svg>`;
-}
-function targetBreakdown(ex){
-  const items=ex.targets.map((tg,index)=>({tg,index,color:TARGET_COLORS[index%TARGET_COLORS.length]}));
-  const sorted=[...items].sort((a,b)=>b.tg.p-a.tg.p);
-  const circumference=2*Math.PI*65,gap=3.2;
-  let offset=0;
-  const slices=items.map(({tg,color})=>{
-    const length=circumference*tg.p/100-gap;
-    const slice=`<circle cx="90" cy="90" r="65" fill="none" stroke="${color}" stroke-width="25" stroke-dasharray="${length} ${circumference-length}" stroke-dashoffset="${-offset}"/>`;
-    offset+=circumference*tg.p/100;
-    return slice;
-  }).join('');
-  const label=sorted.map(({tg})=>`${tg[lang]||tg.en} ${tg.p}%`).join(', ');
-  return `<section class="target-breakdown" aria-label="${t('targetDistribution')}">
-    <div class="pie-chart"><svg viewBox="0 0 180 180" role="img" aria-label="${label}"><circle cx="90" cy="90" r="65" fill="none" stroke="#293236" stroke-width="25"/><g transform="rotate(-90 90 90)">${slices}</g><text class="chart-total" x="90" y="88">100%</text><text class="chart-caption" x="90" y="103">${t('targetTotal')}</text></svg></div>
-    <div class="target-legend-wrap">
-      <div class="target-legend-head"><span></span><span></span><span data-i="targetLabel">${t('targetLabel')}</span><span data-i="weightLabel">${t('weightLabel')}</span></div>
-      <ul class="target-legend">${sorted.map(({tg,color})=>`<li class="target-item"><span class="target-swatch" style="--segment-color:${color}"></span><span class="muscle-info">${muscleInfographic(tg.k||tg.en,color)}</span><span class="target-name">${tg[lang]||tg.en}</span><span class="target-share">${tg.p}%</span></li>`).join('')}</ul>
-    </div>
-  </section>`;
-}
-const I18={
-  en:{timer:'Rest',d1:'Back & Biceps',d2:'Chest & Triceps',d3:'Legs',d4:'Shoulders',
-      footer:'Form first · Consistency always',rt:'Rest Timer',rs:'Between sets',
-      start:'Start',close:'Close',reset:'Reset',tips:'Form cues',male:'♂ Male',female:'♀ Female',targetLabel:'Muscle target',weightLabel:'Share',targetDistribution:'Muscle target distribution',targetTotal:'TOTAL'},
-  el:{timer:'Διάλειμμα',d1:'Πλάτη & Δικέφαλοι',d2:'Στήθος & Τρικέφαλοι',d3:'Πόδια',d4:'Ώμοι',
-      footer:'Τεχνική πρώτα · Συνέπεια πάντα',rt:'Χρονόμετρο',rs:'Μεταξύ σετ',
-      start:'Έναρξη',close:'Κλείσιμο',reset:'Επαναφορά',tips:'Σημεία τεχνικής',male:'♂ Άνδρας',female:'♀ Γυναίκα',targetLabel:'Μυϊκή ομάδα',weightLabel:'Συμμετοχή',targetDistribution:'Κατανομή μυϊκών στόχων',targetTotal:'ΣΥΝΟΛΟ'}
-};
-
-const D={
-  1:[
-    {id:'d1e1',n:{en:'Deadlift',el:'Άρση Θανάτου'},s:'3×8-10',m:{en:'Posterior chain',el:'Οπίσθια αλυσίδα'},
-     targets:[{en:'Glutes',el:'Γλουτοί',p:30,k:'glutes'},{en:'Hamstrings',el:'Οπίσθιοι',p:25,k:'hamstrings'},{en:'Erectors',el:'Ορθωτήρες',p:20,k:'erectors'},{en:'Quads',el:'Τετρακέφαλοι',p:15,k:'quads'},{en:'Traps / Lats',el:'Τραπεζ. / Πλατείς',p:10,k:'traps'}],
-     t:{en:['Bar close to the body.','Hinge at the hips, neutral spine.','Drive through mid-foot.','Own the pattern before load.'],el:['Μπάρα κοντά στο σώμα.','Κίνηση από γοφούς, ουδέτερη σπονδυλική.','Σπρώξε από μέσο ποδιού.','Μάθε την κίνηση πριν το φορτίο.']},
-     mediaKey:'deadlift'},
-    {id:'d1e2',n:{en:'Seated Cable Row',el:'Κωπηλατική'},s:'3×10-12',m:{en:'Lats · Mid-back',el:'Πλατείς · Μέση πλάτη'},
-     targets:[{en:'Lats',el:'Πλατείς',p:40,k:'lats'},{en:'Rhomboids',el:'Ρομβοειδείς',p:30,k:'rhomboids'},{en:'Biceps',el:'Δικέφαλοι',p:20,k:'biceps'},{en:'Rear delts',el:'Οπίσθιοι δελτ.',p:10,k:'reardelts'}],
-     t:{en:['Sit tall, chest proud.','Pull elbows back and down.','Squeeze the shoulder blades.','Control the return.'],el:['Κάθισε ίσια, στήθος ψηλά.','Τράβα αγκώνες πίσω-κάτω.','Σφίξε ωμοπλάτες.','Έλεγξε την επιστροφή.']},
-     mediaKey:'seatedCableRow'},
-    {id:'d1e3',n:{en:'Dumbbell Curl',el:'Κάμψη Δικεφάλων'},s:'3×12-15',m:{en:'Biceps',el:'Δικέφαλοι'},
-     targets:[{en:'Biceps',el:'Δικέφαλοι',p:70,k:'biceps'},{en:'Brachialis',el:'Βραχιόνιος',p:20,k:'brachialis'},{en:'Forearms',el:'Πήχεις',p:10,k:'forearms'}],
-     t:{en:['Elbows pinned to sides.','No swinging.','Squeeze at the top.','Lower in 2–3 seconds.'],el:['Αγκώνες κολλημένοι.','Χωρίς ταλάντευση.','Σφίξε στην κορυφή.','Κατέβασε σε 2–3 δευτ.']},
-     mediaKey:'dumbbellCurl'},
-    {id:'d1e4',n:{en:'Preacher Curl',el:'Preacher Curl'},s:'3×12-15',m:{en:'Biceps isolation',el:'Απομόνωση δικεφάλων'},
-     targets:[{en:'Biceps',el:'Δικέφαλοι',p:80,k:'biceps'},{en:'Brachialis',el:'Βραχιόνιος',p:15,k:'brachialis'},{en:'Forearms',el:'Πήχεις',p:5,k:'forearms'}],
-     t:{en:['Upper arm fully on the pad.','Full range of motion.','No bounce at the bottom.','Strict form only.'],el:['Μπράτσο ολόκληρο στο μαξιλάρι.','Πλήρες εύρος.','Χωρίς αναπήδηση.','Αυστηρή τεχνική.']},
-     mediaKey:'preacherCurl'}
-  ],
-  2:[
-    {id:'d2e1',n:{en:'Bench Press',el:'Πιέσεις Πάγκου'},s:'3×8-10',m:{en:'Chest · Triceps · Delts',el:'Στήθος · Τρικέφαλοι · Δελτοειδείς'},
-     targets:[{en:'Chest',el:'Στήθος',p:55,k:'chest'},{en:'Triceps',el:'Τρικέφαλοι',p:25,k:'triceps'},{en:'Front delts',el:'Πρόσθιοι δελτ.',p:20,k:'frontdelts'}],
-     t:{en:['Feet flat, slight arch, scapulae set.','Slightly diagonal bar path.','Lower under control.','Wrists stacked over elbows.'],el:['Πόδια σταθερά, ελαφριά καμάρα.','Ελαφρώς διαγώνια πορεία.','Κατέβασε με έλεγχο.','Καρποί πάνω από αγκώνες.']},
-     mediaKey:'benchPress'},
-    {id:'d2e2',n:{en:'Incline Dumbbell Press',el:'Κεκλιμένες Πιέσεις'},s:'3×10-12',m:{en:'Upper chest',el:'Άνω στήθος'},
-     targets:[{en:'Upper chest',el:'Άνω στήθος',p:50,k:'upperchest'},{en:'Front delts',el:'Πρόσθιοι δελτ.',p:30,k:'frontdelts'},{en:'Triceps',el:'Τρικέφαλοι',p:20,k:'triceps'}],
-     t:{en:['Bench at 30–45°.','Lower to outer chest.','Press up and slightly in.','Soft elbows at the top.'],el:['Πάγκος 30–45°.','Κατέβασε έξω από στήθος.','Πίεσε πάνω και μέσα.','Ελαφριά κάμψη αγκώνων.']},
-     mediaKey:'inclinePress'},
-    {id:'d2e3',n:{en:'Tricep Pushdown',el:'Pushdown Τρικεφάλων'},s:'3×12-15',m:{en:'Triceps',el:'Τρικέφαλοι'},
-     targets:[{en:'Triceps',el:'Τρικέφαλοι',p:90,k:'triceps'},{en:'Anconeus',el:'Αγκωνιαίος',p:10,k:'anconeus'}],
-     t:{en:['Elbows glued to sides.','Full extension.','No torso swing.','Squeeze at the bottom.'],el:['Αγκώνες κολλημένοι.','Πλήρης έκταση.','Χωρίς ταλάντευση.','Σφίξε στο κάτω σημείο.']},
-     mediaKey:'pushdown'},
-    {id:'d2e4',n:{en:'Overhead Extension',el:'Εκτάσεις πάνω από κεφάλι'},s:'3×12-15',m:{en:'Triceps long head',el:'Μακρά κεφαλή τρικεφάλου'},
-     targets:[{en:'Triceps (long)',el:'Τρικέφαλοι (μακρά)',p:70,k:'triceps'},{en:'Triceps (other)',el:'Τρικέφαλοι (λοιπές)',p:30,k:'triceps'}],
-     t:{en:['Upper arms close to head.','Lower until a stretch.','Brace the core.','Great long-head emphasis.'],el:['Μπράτσα κοντά στο κεφάλι.','Κατέβασε μέχρι διάταση.','Σταθεροποίησε κορμό.','Έμφαση στη μακρά κεφαλή.']},
-     mediaKey:'overheadExtension'}
-  ],
-  3:[
-    {id:'d3e1',n:{en:'Barbell Squat',el:'Καθίσματα'},s:'3×8-10',m:{en:'Quads · Glutes · Core',el:'Τετρακέφαλοι · Γλουτοί · Κορμός'},
-     targets:[{en:'Quads',el:'Τετρακέφαλοι',p:40,k:'quads'},{en:'Glutes',el:'Γλουτοί',p:30,k:'glutes'},{en:'Core',el:'Κορμός',p:15,k:'core'},{en:'Hamstrings',el:'Οπίσθιοι',p:15,k:'hamstrings'}],
-     t:{en:['Bar on upper traps or rear delts.','Break hips and knees together.','Knees track over toes.','At least parallel depth.'],el:['Μπάρα στους τραπεζοειδείς.','Γοφοί και γόνατα μαζί.','Γόνατα πάνω από δάχτυλα.','Τουλάχιστον παράλληλα.']},
-     mediaKey:'squat'},
-    {id:'d3e2',n:{en:'Leg Press',el:'Πιέσεις Ποδιών'},s:'3×10-12',m:{en:'Quads · Glutes',el:'Τετρακέφαλοι · Γλουτοί'},
-     targets:[{en:'Quads',el:'Τετρακέφαλοι',p:50,k:'quads'},{en:'Glutes',el:'Γλουτοί',p:35,k:'glutes'},{en:'Hamstrings',el:'Οπίσθιοι',p:15,k:'hamstrings'}],
-     t:{en:['Feet mid-platform.','About 90° without hips lifting.','No hard lockout.','Control the eccentric.'],el:['Πόδια στη μέση.','~90° χωρίς να σηκωθούν γοφοί.','Χωρίς απότομο κλείδωμα.','Έλεγξε την έκκεντρη.']},
-     mediaKey:'legPress'},
-    {id:'d3e3',n:{en:'Romanian Deadlift',el:'Ρουμάνικη Άρση'},s:'3×10-12',m:{en:'Hamstrings · Glutes',el:'Οπίσθιοι · Γλουτοί'},
-     targets:[{en:'Hamstrings',el:'Οπίσθιοι',p:45,k:'hamstrings'},{en:'Glutes',el:'Γλουτοί',p:35,k:'glutes'},{en:'Erectors',el:'Ορθωτήρες',p:20,k:'erectors'}],
-     t:{en:['Soft knees, hinge the hips.','Bar close to the legs.','Feel the stretch.','Spine stays neutral.'],el:['Ελαφριά κάμψη γονάτων.','Μπάρα κοντά στα πόδια.','Νιώσε τη διάταση.','Ουδέτερη σπονδυλική.']},
-     mediaKey:'rdl'},
-    {id:'d3e4',n:{en:'Walking Lunges',el:'Βηματισμοί'},s:'3×12-15',m:{en:'Quads · Glutes · Balance',el:'Τετρακέφαλοι · Γλουτοί · Ισορροπία'},
-     targets:[{en:'Quads',el:'Τετρακέφαλοι',p:40,k:'quads'},{en:'Glutes',el:'Γλουτοί',p:40,k:'glutes'},{en:'Hamstrings',el:'Οπίσθιοι',p:10,k:'hamstrings'},{en:'Core',el:'Κορμός',p:10,k:'core'}],
-     t:{en:['Long enough step.','Front knee over mid-foot.','Torso upright.','Alternate continuously.'],el:['Αρκετά μεγάλο βήμα.','Γόνατο πάνω από μέσο πόδι.','Κορμός ίσιος.','Εναλλαγή συνεχώς.']},
-     mediaKey:'lunges'}
-  ],
-  4:[
-    {id:'d4e1',n:{en:'Overhead Press',el:'Πιέσεις Ώμων'},s:'3×8-10',m:{en:'Shoulders · Triceps',el:'Ώμοι · Τρικέφαλοι'},
-     targets:[{en:'Front delts',el:'Πρόσθιοι δελτ.',p:40,k:'frontdelts'},{en:'Triceps',el:'Τρικέφαλοι',p:25,k:'triceps'},{en:'Side delts',el:'Πλάγιοι δελτ.',p:20,k:'sidedelts'},{en:'Upper chest',el:'Άνω στήθος',p:15,k:'upperchest'}],
-     t:{en:['Bar at upper chest.','Brace the core hard.','Slight arc path.','Lock out overhead.'],el:['Μπάρα στο άνω στήθος.','Σταθεροποίησε κορμό.','Ελαφριά καμπύλη.','Κλείδωσε πάνω από κεφάλι.']},
-     mediaKey:'overheadPress'},
-    {id:'d4e2',n:{en:'Seated Dumbbell Press',el:'Πιέσεις με Αλτήρες'},s:'3×10-12',m:{en:'All deltoid heads',el:'Όλες οι κεφαλές δελτοειδών'},
-     targets:[{en:'Front delts',el:'Πρόσθιοι δελτ.',p:40,k:'frontdelts'},{en:'Side delts',el:'Πλάγιοι δελτ.',p:25,k:'sidedelts'},{en:'Triceps',el:'Τρικέφαλοι',p:25,k:'triceps'},{en:'Upper chest',el:'Άνω στήθος',p:10,k:'upperchest'}],
-     t:{en:['Use back support if available.','Start at ear level.','Press without hard lockout.','Lower under control.'],el:['Υποστήριξη πλάτης αν υπάρχει.','Ξεκίνα στο ύψος αυτιών.','Χωρίς απότομο κλείδωμα.','Κατέβασε με έλεγχο.']},
-     mediaKey:'seatedPress'},
-    {id:'d4e3',n:{en:'Lateral Raises',el:'Πλάγιες Ανυψώσεις'},s:'3×12-15',m:{en:'Side delts',el:'Πλάγιοι δελτοειδείς'},
-     targets:[{en:'Side delts',el:'Πλάγιοι δελτ.',p:80,k:'sidedelts'},{en:'Front delts',el:'Πρόσθιοι',p:10,k:'frontdelts'},{en:'Rear delts',el:'Οπίσθιοι',p:10,k:'reardelts'}],
-     t:{en:['Slight elbow bend.','Raise just above parallel.','Lead with the elbows.','No momentum.'],el:['Ελαφριά κάμψη αγκώνων.','Λίγο πάνω από παράλληλο.','Οδήγησε με αγκώνες.','Χωρίς ορμή.']},
-     mediaKey:'lateralRaises'},
-    {id:'d4e4',n:{en:'Face Pulls',el:'Face Pulls'},s:'3×12-15',m:{en:'Rear delts · Upper back',el:'Οπίσθιοι δελτ. · Άνω πλάτη'},
-     targets:[{en:'Rear delts',el:'Οπίσθιοι δελτ.',p:40,k:'reardelts'},{en:'Rhomboids',el:'Ρομβοειδείς',p:30,k:'rhomboids'},{en:'Rotator cuff',el:'Περιστροφικός',p:20,k:'rotator'},{en:'Traps',el:'Τραπεζοειδείς',p:10,k:'traps'}],
-     t:{en:['Pull toward face / forehead.','Externally rotate at the end.','Squeeze rear delts.','Great for shoulder health.'],el:['Τράβα προς πρόσωπο.','Έξω στροφή στο τέλος.','Σφίξε οπίσθιους.','Εξαιρετικό για υγεία ώμων.']},
-     mediaKey:'facePulls'}
-  ]
-};
-
-let lang=localStorage.getItem('apexLang')||'en';
-let exGender=JSON.parse(localStorage.getItem('apexExGen')||'{}');
-const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
-const t=k=>I18[lang][k]||I18.en[k]||k;
-const enc=p=>p.split('/').map(s=>encodeURIComponent(s)).join('/');
-
-function apply(){
-  $$('[data-i]').forEach(el=>el.textContent=t(el.dataset.i));
-  $('#languageSelect').value=lang;
-  $('#timerBtn').textContent = lang==='en' ? 'Rest timer' : 'Χρονόμετρο';
-  document.documentElement.lang=lang;
-  draw();
-}
-
-function mediaHTML(ex,g){
-  const m = (ex.mediaKey && window.MEDIA && window.MEDIA[ex.mediaKey])
-    ? window.MEDIA[ex.mediaKey]
-    : (ex.media || null);
-  if(!m) return '<p style="color:#6a6a78;text-align:center;padding:2rem">—</p>';
-  const primary = g==='female' ? (m.female || m.male) : (m.male || m.female);
-  const fallback = g==='female' ? m.male : m.female;
-  if(!primary) return '<p style="color:#6a6a78;text-align:center;padding:2rem">—</p>';
-  const src = enc(primary);
-  const fb = fallback && fallback !== primary ? enc(fallback) : '';
-  const resolutionFit = /\.webm$/i.test(primary) ? ` onloadedmetadata="this.closest('.stage').style.aspectRatio=this.videoWidth+'/'+this.videoHeight"` : '';
-  if(/\.(mp4|mkv|webm)$/i.test(primary)){
-    const onerr = fb ? ` onerror="this.onerror=null;this.src='${fb}'"` : '';
-    return `<video src="${src}" autoplay loop muted playsinline controls preload="metadata"${resolutionFit}${onerr}></video>`;
-  }
-  return `<img src="${src}" alt="${ex.n[lang]}" loading="lazy">`;
-}
-
-function draw(){
-  for(let d=1;d<=4;d++){
-    const box=$('#e'+d); box.innerHTML='';
-    D[d].forEach(ex=>{
-      const g=exGender[ex.id]||'male';
-      const c=document.createElement('article');
-      c.className='ex'; c.dataset.id=ex.id;
-      c.innerHTML=`
-        <div class="ex-head">
-          <div class="row">
-            <div class="ex-name">${ex.n[lang]}</div>
-            <span class="ex-sets">${ex.s}</span>
-          </div>
-          <div class="ex-muscles">${ex.m[lang]}</div>
-        </div>
-        ${targetBreakdown(ex)}
-        <div class="tips">
-          <h4>${t('tips')}</h4>
-          <ul>${ex.t[lang].map(x=>'<li>'+x+'</li>').join('')}</ul>
-        </div>
-        <div class="media-area">
-          <div class="g-row">
-            <button class="g-btn${g==='male'?' on':''}" data-g="male" data-ex="${ex.id}">${t('male')}</button>
-            <button class="g-btn${g==='female'?' on':''}" data-g="female" data-ex="${ex.id}">${t('female')}</button>
-          </div>
-          <div class="stage" data-media="${ex.id}">${mediaHTML(ex,g)}</div>
-        </div>`;
-      box.appendChild(c);
-    });
-  }
-}
-
-$('#days').onclick=e=>{
-  const btn=e.target.closest('.day-card'); if(!btn)return;
-  $$('.day-card').forEach(x=>x.classList.remove('on'));
-  btn.classList.add('on');
-  $$('.panel').forEach(p=>p.classList.remove('on'));
-  $('#p'+btn.dataset.d).classList.add('on');
-};
-
-document.onclick=e=>{
-  const gb=e.target.closest('.g-btn');
-  if(!gb)return;
-  const id=gb.dataset.ex, g=gb.dataset.g;
-  exGender[id]=g; localStorage.setItem('apexExGen',JSON.stringify(exGender));
-  gb.parentElement.querySelectorAll('.g-btn').forEach(b=>b.classList.toggle('on',b.dataset.g===g));
-  const mediaBox=gb.closest('.ex').querySelector('[data-media="'+id+'"]');
-  let ex=null;
-  for(const day of Object.values(D)){const f=day.find(x=>x.id===id);if(f){ex=f;break}}
-  if(ex&&mediaBox)mediaBox.innerHTML=mediaHTML(ex,g);
-};
-
-$('#languageSelect').onchange=e=>{lang=e.target.value;localStorage.setItem('apexLang',lang);apply()};
-
-let S=90,R=90,IV=null;
-const ov=$('#ov'),clk=$('#clk'),tt=$('#tToggle');
-const fmt=s=>Math.floor(s/60)+':'+(s%60).toString().padStart(2,'0');
-const upd=()=>clk.textContent=fmt(R);
-$('#timerBtn').onclick=()=>ov.classList.add('show');
-$('#tClose').onclick=()=>ov.classList.remove('show');
-ov.onclick=e=>{if(e.target===ov)ov.classList.remove('show')};
-$$('.pre').forEach(b=>b.onclick=()=>{
-  $$('.pre').forEach(x=>x.classList.remove('on'));b.classList.add('on');
-  S=+b.dataset.s;R=S;if(IV){clearInterval(IV);IV=null;tt.textContent=t('start')}upd();
-});
-tt.onclick=()=>{
-  if(IV){clearInterval(IV);IV=null;tt.textContent=t('start')}
-  else{tt.textContent=lang==='en'?'Pause':'Παύση';
-    IV=setInterval(()=>{R--;upd();if(R<=0){clearInterval(IV);IV=null;tt.textContent=t('start');R=S;upd();navigator.vibrate&&navigator.vibrate([180,60,180])}},1000)}
-};
-$('#tReset').onclick=()=>{if(IV){clearInterval(IV);IV=null;tt.textContent=t('start')}R=S;upd()};
-
-apply();
-</script>
+<script src="workouts-data.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
