@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
 <title>4-Day Split</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
 :root {
   --bg:#060608; --surface:#0e0e12; --card:#141418;
@@ -29,7 +29,7 @@ body{
   padding:.9rem 1.4rem;max-width:1100px;margin:0 auto;
   background:linear-gradient(to bottom, rgba(6,6,8,.95) 60%, transparent);
 }
-.brand{font-family:Syne,sans-serif;font-weight:800;font-size:1.25rem;letter-spacing:-.03em}
+.brand{font-family:'Instrument Sans',system-ui,sans-serif;font-weight:700;font-size:1.1rem;letter-spacing:.015em}
 .brand em{color:var(--accent);font-style:normal}
 .top-actions{display:flex;align-items:center;gap:.5rem}
 .flag-btn{
@@ -65,7 +65,7 @@ body{
   box-shadow:0 0 0 1px rgba(255,59,59,.15), 0 12px 40px rgba(255,59,59,.08);
 }
 .day-card .n{
-  font-family:Syne,sans-serif;font-weight:800;font-size:2rem;
+  font-family:'Instrument Sans',system-ui,sans-serif;font-weight:600;font-size:1.5rem;
   color:rgba(255,255,255,.08);line-height:1;margin-bottom:.35rem;
 }
 .day-card.on .n{color:rgba(255,59,59,.25)}
@@ -85,36 +85,25 @@ body{
 .ex:hover{border-color:rgba(255,255,255,.12)}
 .ex-head{padding:1.2rem 1.25rem 1rem}
 .ex-head .row{display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem}
-.ex-name{font-family:Syne,sans-serif;font-weight:700;font-size:1.15rem;letter-spacing:-.02em}
+.ex-name{font-family:'Instrument Sans',system-ui,sans-serif;font-weight:600;font-size:1.05rem;letter-spacing:-.01em}
 .ex-sets{
   flex-shrink:0;font-size:.7rem;font-weight:700;color:var(--accent);
   background:rgba(255,59,59,.12);padding:.25rem .55rem;border-radius:8px;
 }
 .ex-muscles{font-size:.8rem;color:var(--faint);margin-top:.3rem}
 
-/* Large muscle target cards */
-.targets{
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));
-  gap:.7rem;padding:0 1.25rem 1.1rem;
-}
-.t-card{
-  background:rgba(255,255,255,.03);border:1px solid var(--line);
-  border-radius:18px;padding:1rem .75rem .85rem;text-align:center;
-  transition:border-color .2s, transform .2s;
-}
-.t-card:hover{border-color:rgba(255,59,59,.35);transform:translateY(-2px)}
-.t-art{
-  width:72px;height:72px;margin:0 auto .65rem;border-radius:18px;
-  background:linear-gradient(145deg,rgba(255,59,59,.18),rgba(255,59,59,.04));
-  border:1px solid rgba(255,59,59,.12);
-  display:grid;place-items:center;
-}
-.t-art svg{width:40px;height:40px}
-.t-pct{
-  font-family:Syne,sans-serif;font-weight:800;font-size:1.35rem;
-  color:var(--accent);letter-spacing:-.03em;line-height:1;margin-bottom:.2rem;
-}
-.t-name{font-size:.72rem;font-weight:600;color:var(--mute);line-height:1.3}
+/* Proportional muscle distribution chart and compact legend */
+.target-breakdown{display:grid;grid-template-columns:minmax(112px,.8fr) minmax(0,1.35fr);gap:1rem;align-items:center;padding:0 1.25rem 1.1rem}
+.pie-chart{width:min(100%,160px);aspect-ratio:1;border-radius:50%;justify-self:center;border:3px solid #1b2228;box-shadow:0 8px 22px rgba(0,0,0,.22),inset 0 0 0 1px rgba(255,255,255,.12)}
+.target-legend{list-style:none;display:flex;flex-direction:column;min-width:0}
+.target-legend-head,.target-item{display:grid;grid-template-columns:11px minmax(0,1fr) auto;align-items:center;gap:.55rem}
+.target-legend-head{padding:0 0 .35rem;color:var(--faint);font-size:.61rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.target-legend-head span:last-child{min-width:3.1rem;text-align:right}
+.target-item{padding:.44rem 0;border-bottom:1px solid rgba(226,235,240,.07)}
+.target-item:last-child{border-bottom:0}
+.target-swatch{width:9px;height:9px;border-radius:3px;background:var(--segment-color);box-shadow:0 0 7px color-mix(in srgb,var(--segment-color) 35%,transparent)}
+.target-name{min-width:0;color:var(--text);font-size:.79rem;font-weight:550;line-height:1.25;overflow-wrap:anywhere}
+.target-share{min-width:3.1rem;text-align:right;color:var(--mute);font-size:.78rem;font-weight:600;font-variant-numeric:tabular-nums}
 
 /* Tips */
 .tips{padding:0 1.25rem 1rem}
@@ -143,7 +132,7 @@ body{
   border-color:transparent;color:#fff;box-shadow:0 2px 12px var(--glow);
 }
 .stage{
-  width:100%;aspect-ratio:9/16;max-height:380px;
+  width:100%;aspect-ratio:9/16;max-height:460px;
   background:#000;border-radius:16px;overflow:hidden;border:1px solid var(--line);
 }
 .stage video,.stage img{width:100%;height:100%;object-fit:contain;display:block}
@@ -167,7 +156,7 @@ footer{
   background:#111114;border:1px solid var(--line);border-radius:24px;
   padding:1.8rem 1.5rem;width:100%;max-width:320px;text-align:center;
 }
-.modal h3{font-family:Syne,sans-serif;font-size:1.2rem;font-weight:700;margin-bottom:.2rem}
+.modal h3{font-family:'Instrument Sans',system-ui,sans-serif;font-size:1.1rem;font-weight:600;margin-bottom:.2rem}
 .modal p{color:var(--faint);font-size:.8rem;margin-bottom:1rem}
 .presets{display:flex;gap:.35rem;justify-content:center;margin-bottom:.7rem}
 .pre{
@@ -176,7 +165,7 @@ footer{
 }
 .pre.on{border-color:var(--accent);color:var(--accent)}
 .clock{
-  font-family:Syne,sans-serif;font-weight:800;font-size:3.5rem;
+  font-family:'Instrument Sans',system-ui,sans-serif;font-weight:600;font-size:3.2rem;
   background:linear-gradient(120deg,var(--accent),var(--accent2));
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
   margin:.3rem 0 1.1rem;
@@ -201,10 +190,11 @@ body { background-image:radial-gradient(ellipse 70% 35% at 50% -18%,rgba(101,183
 .brand-sub { display:block;color:var(--faint);font-size:.56rem;letter-spacing:.18em;font-weight:600;line-height:1.2; }
 .main { max-width:1180px;padding:1.4rem 1.5rem 4rem; }
 .top-actions { gap:.75rem; }
-.language-switch { display:flex;gap:2px;padding:3px;border:1px solid var(--line);border-radius:10px;background:#12171b; }
-.language-btn { min-width:42px;padding:.42rem .65rem;border:0;border-radius:7px;background:transparent;color:var(--mute);font:600 .75rem 'Instrument Sans',sans-serif;letter-spacing:.04em;cursor:pointer;transition:background .15s,color .15s; }
-.language-btn:hover { color:var(--text); }
-.language-btn.on { background:#293630;color:#b9e2d6;box-shadow:inset 0 0 0 1px rgba(101,183,164,.18); }
+.language-control { display:flex;align-items:center; }
+
+.language-select { appearance:none;min-width:68px;padding:.55rem 1.8rem .55rem .7rem;border:1px solid var(--line);border-radius:9px;background:#171e22;color:var(--text);font:600 .78rem 'Instrument Sans',sans-serif;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='m2 4 4 4 4-4' fill='none' stroke='%23a4b0b7' stroke-width='1.5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .6rem center; }
+.language-select:focus-visible { outline:2px solid var(--accent);outline-offset:2px; }
+.language-select option { background:#171e22;color:var(--text); }
 .timer-btn { padding:.58rem .9rem;border:1px solid rgba(101,183,164,.25);border-radius:10px;background:#20302d;color:#b9e2d6;box-shadow:none;font-size:.8rem; }
 .day-card { padding:1.1rem 1rem;border-radius:14px; }
 .day-card.on { border-color:rgba(101,183,164,.48);background:#202a2a;box-shadow:inset 3px 0 var(--accent); }
@@ -214,10 +204,6 @@ body { background-image:radial-gradient(ellipse 70% 35% at 50% -18%,rgba(101,183
 .ex { border-radius:16px; }
 .ex-name { font-family:'Instrument Sans',sans-serif;font-weight:650;letter-spacing:-.015em;font-size:1.08rem; }
 .ex-sets { color:#b9e2d6;background:rgba(101,183,164,.11); }
-.t-card { border-radius:12px;background:rgba(255,255,255,.018); }
-.t-art { border-radius:12px;background:rgba(101,183,164,.08);border-color:rgba(101,183,164,.12); }
-.t-art svg { filter:hue-rotate(75deg) saturate(.55); }
-.t-pct { font-family:'Instrument Sans',sans-serif;font-size:1.2rem;color:var(--accent); }
 .tips h4 { color:var(--accent); }
 .tips li::before { background:var(--accent); }
 .g-btn { border-radius:9px; }
@@ -226,7 +212,7 @@ body { background-image:radial-gradient(ellipse 70% 35% at 50% -18%,rgba(101,183
 .modal { border-radius:18px; }
 .clock { font-family:'Instrument Sans',sans-serif;background:none;-webkit-text-fill-color:var(--accent);color:var(--accent); }
 .mbtns button.main { background:#315d52; }
-@media(max-width:520px) { .top { padding:.75rem 1rem; }.main { padding:1rem 1rem 3rem; }.brand { gap:.45rem; }.brand-mark { width:30px;height:30px; }.top-actions { gap:.45rem; }.timer-btn { padding:.52rem .68rem; } }
+@media(max-width:520px) { .target-breakdown { grid-template-columns:minmax(96px,.75fr) minmax(0,1.4fr);gap:.75rem;padding-left:.8rem;padding-right:.8rem; }.pie-chart { width:min(100%,132px); } .top { padding:.75rem 1rem; }.main { padding:1rem 1rem 3rem; }.brand { gap:.45rem; }.brand-mark { width:30px;height:30px; }.top-actions { gap:.45rem; }.timer-btn { padding:.52rem .68rem; } }
 </style>
 </head>
 <body>
@@ -234,10 +220,12 @@ body { background-image:radial-gradient(ellipse 70% 35% at 50% -18%,rgba(101,183
 <header class="top">
   <a class="brand" href="#" aria-label="Apex training"><span class="brand-mark">A</span><span>APEX<span class="brand-sub">TRAINING</span></span></a>
   <div class="top-actions">
-    <div class="language-switch" role="group" aria-label="Language">
-      <button class="language-btn on" id="flagEn" type="button" aria-pressed="true">EN</button>
-      <button class="language-btn" id="flagEl" type="button" aria-pressed="false">ΕΛ</button>
-    </div>
+    <label class="language-control" aria-label="Language">
+      <select class="language-select" id="languageSelect" aria-label="Language">
+        <option value="en">EN</option>
+        <option value="el">EL</option>
+      </select>
+    </label>
     <button class="timer-btn" id="timerBtn" data-i="timer">Rest timer</button>
   </div>
 </header>
@@ -295,60 +283,28 @@ body { background-image:radial-gradient(ellipse 70% 35% at 50% -18%,rgba(101,183
 
 <script src="media-paths.js"></script>
 <script>
-/* Larger muscle silhouettes */
-const SVG = {
-  glutes:`<svg viewBox="0 0 64 64" fill="none"><path d="M18 28c0-6 6-12 14-12s14 6 14 12v18c0 4-3 8-8 8h-12c-5 0-8-4-8-8V28z" stroke="#ff6b4a" stroke-width="2.5"/><path d="M20 24c-4-3-5-8-3-12M44 24c4-3 5-8 3-12" stroke="#ff6b4a" stroke-width="2" stroke-linecap="round"/></svg>`,
-  hamstrings:`<svg viewBox="0 0 64 64" fill="none"><path d="M22 8v48M42 8v48" stroke="#ff6b4a" stroke-width="2.5" stroke-linecap="round"/><path d="M22 32c6 4 14 4 20 0" stroke="#ff6b4a" stroke-width="2.5" stroke-linecap="round"/></svg>`,
-  erectors:`<svg viewBox="0 0 64 64" fill="none"><path d="M32 6v52" stroke="#ff6b4a" stroke-width="2.5" stroke-linecap="round"/><path d="M22 16h20M22 32h20M22 48h20" stroke="#ff6b4a" stroke-width="2" stroke-linecap="round"/></svg>`,
-  quads:`<svg viewBox="0 0 64 64" fill="none"><path d="M20 10v44M44 10v44" stroke="#ff6b4a" stroke-width="2.5" stroke-linecap="round"/><path d="M20 24h24M20 40h24" stroke="#ff6b4a" stroke-width="2" stroke-linecap="round"/></svg>`,
-  traps:`<svg viewBox="0 0 64 64" fill="none"><path d="M12 44L32 12l20 32" stroke="#ff6b4a" stroke-width="2.5" stroke-linejoin="round"/><path d="M20 44h24" stroke="#ff6b4a" stroke-width="2" stroke-linecap="round"/></svg>`,
-  lats:`<svg viewBox="0 0 64 64" fill="none"><path d="M32 8v48" stroke="#ff6b4a" stroke-width="2.5"/><path d="M32 18c-12 6-18 16-18 30M32 18c12 6 18 16 18 30" stroke="#ff6b4a" stroke-width="2.5" stroke-linecap="round"/></svg>`,
-  rhomboids:`<svg viewBox="0 0 64 64" fill="none"><path d="M32 10l18 22-18 22L14 32z" stroke="#ff6b4a" stroke-width="2.5" stroke-linejoin="round"/></svg>`,
-  biceps:`<svg viewBox="0 0 64 64" fill="none"><path d="M18 52V24a10 10 0 0120 0v8" stroke="#ff6b4a" stroke-width="2.5" stroke-linecap="round"/><path d="M38 32h6a6 6 0 016 6v14" stroke="#ff6b4a" stroke-width="2.5" stroke-linecap="round"/></svg>`,
-  brachialis:`<svg viewBox="0 0 64 64" fill="none"><path d="M22 12v40M22 32h18a6 6 0 016 6v14" stroke="#ff6b4a" stroke-width="2.5" stroke-linecap="round"/></svg>`,
-  forearms:`<svg viewBox="0 0 64 64" fill="none"><path d="M26 8v48M38 18v38" stroke="#ff6b4a" stroke-width="2.5" stroke-linecap="round"/></svg>`,
-  chest:`<svg viewBox="0 0 64 64" fill="none"><path d="M8 26c6-10 18-14 24-14s18 4 24 14v12c-6 8-18 12-24 12s-18-4-24-12V26z" stroke="#ff6b4a" stroke-width="2.5"/></svg>`,
-  upperchest:`<svg viewBox="0 0 64 64" fill="none"><path d="M8 30c6-12 18-16 24-16s18 4 24 16" stroke="#ff6b4a" stroke-width="2.5" stroke-linecap="round"/><path d="M14 36c6 4 14 6 18 6s12-2 18-6" stroke="#ff6b4a" stroke-width="2" stroke-linecap="round"/></svg>`,
-  triceps:`<svg viewBox="0 0 64 64" fill="none"><path d="M32 8v48" stroke="#ff6b4a" stroke-width="2.5"/><path d="M20 18c0 12 4 22 12 32M44 18c0 12-4 22-12 32" stroke="#ff6b4a" stroke-width="2.5" stroke-linecap="round"/></svg>`,
-  frontdelts:`<svg viewBox="0 0 64 64" fill="none"><circle cx="32" cy="26" r="14" stroke="#ff6b4a" stroke-width="2.5"/><path d="M20 38l-8 16M44 38l8 16" stroke="#ff6b4a" stroke-width="2.5" stroke-linecap="round"/></svg>`,
-  sidedelts:`<svg viewBox="0 0 64 64" fill="none"><path d="M32 18v32" stroke="#ff6b4a" stroke-width="2.5"/><path d="M10 32h44" stroke="#ff6b4a" stroke-width="2.5"/><path d="M16 22l-6 10 6 10M48 22l6 10-6 10" stroke="#ff6b4a" stroke-width="2" stroke-linecap="round"/></svg>`,
-  reardelts:`<svg viewBox="0 0 64 64" fill="none"><path d="M14 26c6-8 14-12 18-12s12 4 18 12" stroke="#ff6b4a" stroke-width="2.5" stroke-linecap="round"/><path d="M18 38c5 8 10 12 14 12s9-4 14-12" stroke="#ff6b4a" stroke-width="2.5" stroke-linecap="round"/></svg>`,
-  core:`<svg viewBox="0 0 64 64" fill="none"><rect x="20" y="10" width="24" height="44" rx="6" stroke="#ff6b4a" stroke-width="2.5"/><path d="M20 24h24M20 38h24" stroke="#ff6b4a" stroke-width="2"/></svg>`,
-  rotator:`<svg viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="10" stroke="#ff6b4a" stroke-width="2.5"/><path d="M32 12v6M32 46v6M12 32h6M46 32h6" stroke="#ff6b4a" stroke-width="2.5" stroke-linecap="round"/></svg>`,
-  anconeus:`<svg viewBox="0 0 64 64" fill="none"><path d="M32 8v24l12 24M32 32L20 56" stroke="#ff6b4a" stroke-width="2.5" stroke-linecap="round"/></svg>`,
-  default:`<svg viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="18" stroke="#ff6b4a" stroke-width="2.5"/></svg>`
-};
-function icon(k){
-  const s=(k||'').toLowerCase();
-  if(s.includes('glute'))return SVG.glutes;
-  if(s.includes('hamstring')||s.includes('opisth'))return SVG.hamstrings;
-  if(s.includes('erector')||s.includes('orth'))return SVG.erectors;
-  if(s.includes('quad')||s.includes('tetra'))return SVG.quads;
-  if(s.includes('trap'))return SVG.traps;
-  if(s.includes('lat')||s.includes('plate'))return SVG.lats;
-  if(s.includes('rhomb'))return SVG.rhomboids;
-  if(s.includes('bicep')||s.includes('dikef'))return SVG.biceps;
-  if(s.includes('brach'))return SVG.brachialis;
-  if(s.includes('forearm')||s.includes('piche'))return SVG.forearms;
-  if(s.includes('upper')||s.includes('ano'))return SVG.upperchest;
-  if(s.includes('chest')||s.includes('stith'))return SVG.chest;
-  if(s.includes('tricep')||s.includes('trikef'))return SVG.triceps;
-  if(s.includes('front')||s.includes('prosthi'))return SVG.frontdelts;
-  if(s.includes('side')||s.includes('plagi'))return SVG.sidedelts;
-  if(s.includes('rear')||s.includes('opisthiod'))return SVG.reardelts;
-  if(s.includes('core')||s.includes('korm'))return SVG.core;
-  if(s.includes('rotat')||s.includes('perist'))return SVG.rotator;
-  if(s.includes('ancon'))return SVG.anconeus;
-  return SVG.default;
+const TARGET_COLORS=['#65b7a4','#829bd5','#d3a56b','#bd83ad','#dc796b'];
+function targetBreakdown(ex){
+  let cursor=0;
+  const items=ex.targets.map((tg,index)=>({tg,index,color:TARGET_COLORS[index%TARGET_COLORS.length]}));
+  const sectors=items.map(({tg,color})=>{const from=cursor;cursor+=tg.p;return `${color} ${from}% ${cursor}%`}).join(',');
+  const sorted=[...items].sort((a,b)=>b.tg.p-a.tg.p);
+  const label=sorted.map(({tg})=>`${tg[lang]||tg.en} ${tg.p}%`).join(', ');
+  return `<section class="target-breakdown" aria-label="${t('targetDistribution')}">
+    <div class="pie-chart" role="img" aria-label="${label}" style="background:conic-gradient(${sectors})"></div>
+    <div class="target-legend-wrap">
+      <div class="target-legend-head"><span></span><span data-i="targetLabel">${t('targetLabel')}</span><span data-i="weightLabel">${t('weightLabel')}</span></div>
+      <ul class="target-legend">${sorted.map(({tg,color})=>`<li class="target-item"><span class="target-swatch" style="--segment-color:${color}"></span><span class="target-name">${tg[lang]||tg.en}</span><span class="target-share">${tg.p}%</span></li>`).join('')}</ul>
+    </div>
+  </section>`;
 }
-
 const I18={
   en:{timer:'Rest',d1:'Back & Biceps',d2:'Chest & Triceps',d3:'Legs',d4:'Shoulders',
       footer:'Form first · Consistency always',rt:'Rest Timer',rs:'Between sets',
-      start:'Start',close:'Close',reset:'Reset',tips:'Form cues',male:'♂ Male',female:'♀ Female'},
+      start:'Start',close:'Close',reset:'Reset',tips:'Form cues',male:'♂ Male',female:'♀ Female',targetLabel:'Muscle target',weightLabel:'Share',targetDistribution:'Muscle target distribution'},
   el:{timer:'Διάλειμμα',d1:'Πλάτη & Δικέφαλοι',d2:'Στήθος & Τρικέφαλοι',d3:'Πόδια',d4:'Ώμοι',
       footer:'Τεχνική πρώτα · Συνέπεια πάντα',rt:'Χρονόμετρο',rs:'Μεταξύ σετ',
-      start:'Έναρξη',close:'Κλείσιμο',reset:'Επαναφορά',tips:'Σημεία τεχνικής',male:'♂ Άνδρας',female:'♀ Γυναίκα'}
+      start:'Έναρξη',close:'Κλείσιμο',reset:'Επαναφορά',tips:'Σημεία τεχνικής',male:'♂ Άνδρας',female:'♀ Γυναίκα',targetLabel:'Μυϊκή ομάδα',weightLabel:'Συμμετοχή',targetDistribution:'Κατανομή μυϊκών στόχων'}
 };
 
 const D={
@@ -434,10 +390,7 @@ const enc=p=>p.split('/').map(s=>encodeURIComponent(s)).join('/');
 
 function apply(){
   $$('[data-i]').forEach(el=>el.textContent=t(el.dataset.i));
-  $('#flagEn').classList.toggle('on',lang==='en');
-  $('#flagEl').classList.toggle('on',lang==='el');
-  $('#flagEn').setAttribute('aria-pressed',String(lang==='en'));
-  $('#flagEl').setAttribute('aria-pressed',String(lang==='el'));
+  $('#languageSelect').value=lang;
   $('#timerBtn').textContent = lang==='en' ? 'Rest timer' : 'Χρονόμετρο';
   document.documentElement.lang=lang;
   draw();
@@ -453,9 +406,10 @@ function mediaHTML(ex,g){
   if(!primary) return '<p style="color:#6a6a78;text-align:center;padding:2rem">—</p>';
   const src = enc(primary);
   const fb = fallback && fallback !== primary ? enc(fallback) : '';
+  const resolutionFit = /\.webm$/i.test(primary) ? ` onloadedmetadata="this.closest('.stage').style.aspectRatio=this.videoWidth+'/'+this.videoHeight"` : '';
   if(/\.(mp4|mkv|webm)$/i.test(primary)){
     const onerr = fb ? ` onerror="this.onerror=null;this.src='${fb}'"` : '';
-    return `<video src="${src}" autoplay loop muted playsinline controls${onerr}></video>`;
+    return `<video src="${src}" autoplay loop muted playsinline controls preload="metadata"${resolutionFit}${onerr}></video>`;
   }
   return `<img src="${src}" alt="${ex.n[lang]}" loading="lazy">`;
 }
@@ -475,12 +429,7 @@ function draw(){
           </div>
           <div class="ex-muscles">${ex.m[lang]}</div>
         </div>
-        <div class="targets">${ex.targets.map(tg=>`
-          <div class="t-card">
-            <div class="t-art">${icon(tg.k||tg.en)}</div>
-            <div class="t-pct">${tg.p}%</div>
-            <div class="t-name">${tg[lang]||tg.en}</div>
-          </div>`).join('')}</div>
+        ${targetBreakdown(ex)}
         <div class="tips">
           <h4>${t('tips')}</h4>
           <ul>${ex.t[lang].map(x=>'<li>'+x+'</li>').join('')}</ul>
@@ -517,8 +466,7 @@ document.onclick=e=>{
   if(ex&&mediaBox)mediaBox.innerHTML=mediaHTML(ex,g);
 };
 
-$('#flagEn').onclick=()=>{lang='en';localStorage.setItem('apexLang',lang);apply()};
-$('#flagEl').onclick=()=>{lang='el';localStorage.setItem('apexLang',lang);apply()};
+$('#languageSelect').onchange=e=>{lang=e.target.value;localStorage.setItem('apexLang',lang);apply()};
 
 let S=90,R=90,IV=null;
 const ov=$('#ov'),clk=$('#clk'),tt=$('#tToggle');
