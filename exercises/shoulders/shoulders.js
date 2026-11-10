@@ -11,12 +11,12 @@ window.EXERCISE_CATEGORIES.shoulders = {
   targets: ['groupShoulders'],
   exercises: [
     {
-      id: 'overheadPress',
+      id: 'standingDumbbelloverheadPress',
       s: '4 sets · 6-8 reps',
-      n: { en: 'Overhead Barbell Press', el: 'Πιέσεις Ώμων Όρθιος (Military Press)' },
+      n: { en: 'Standing Overhead Dumbbell Press', el: 'Πιέσεις Ώμων με Αλτήρες Όρθιος' },
       m: { en: 'Shoulders, Triceps, Core', el: 'Ώμοι, Τρικέφαλοι, Κορμός' },
       media: {
-        male: 'media/shoulders/overhead-press/standing-barbell-male.webm',
+        male: 'exercises/shoulders/overhead-press/standing-dumbbells-male.webm',
         female: ''
       },
       targets: [
@@ -40,13 +40,13 @@ window.EXERCISE_CATEGORIES.shoulders = {
       }
     },
     {
-      id: 'lateralRaises',
+      id: 'standingDumbbelllateralRaise',
       s: '3 sets · 12-15 reps',
-      n: { en: 'Dumbbell Lateral Raise', el: 'Πλάγιες Aρσεις Ώμων με Αλτήρες' },
+      n: { en: 'Standing Dumbbell Lateral Raise', el: 'Πλάγιες Εκτάσεις Ώμων με Αλτήρες' },
       m: { en: 'Side Delts', el: 'Πλάγιοι Δελτοειδείς' },
       media: {
-        male: 'media/shoulders/lateral-raises/standing-dumbbells-male.webm',
-        female: 'media/shoulders/lateral-raises/standing-dumbbells-female.webm'
+        male: 'exercises/shoulders/lateral-raises/standing-dumbbells-male.webm',
+        female: 'exercises/shoulders/lateral-raises/standing-dumbbells-female.webm'
       },
       targets: [
         { k: 'groupShoulders', p: 90, en: 'Lateral Deltoids', el: 'Πλάγιοι Δελτοειδείς' },
@@ -68,12 +68,12 @@ window.EXERCISE_CATEGORIES.shoulders = {
       }
     },
     {
-      id: 'facePulls',
+      id: 'resistanceBandFacePulls',
       s: '3 sets · 15 reps',
-      n: { en: 'Cable Face Pull', el: 'Face Pulls στην Τροχαλία' },
+      n: { en: 'Resistance Band Face Pull', el: 'Έλξεις προσώπου με λάστιχο' },
       m: { en: 'Rear Delts, Upper Back', el: 'Πίσω Δελτοειδείς, Άνω Πλάτη' },
       media: {
-        male: 'media/shoulders/face-pulls/standing-cable-male.gif',
+        male: 'exercises/shoulders/face-pulls/resistance-band-face-pulls-female.webm',
         female: ''
       },
       targets: [
@@ -102,7 +102,7 @@ window.EXERCISE_CATEGORIES.shoulders = {
       n: { en: 'Arnold Press', el: 'Πιέσεις Arnold' },
       m: { en: 'All Deltoid Heads', el: 'Όλες οι Μοίρες Ώμων' },
       media: {
-        male: 'media/shoulders/arnold-press/seated-dumbells-male.webm',
+        male: 'exercises/shoulders/arnold-press/seated-dumbells-male.webm',
         female: ''
       },
       targets: [
@@ -122,6 +122,34 @@ window.EXERCISE_CATEGORIES.shoulders = {
           'Περιστρέψτε τους καρπούς προς τα έξω καθώς πιέζετε προς τα πάνω.',
           'Ολοκληρώστε με τις παλάμες μπροστά σε πλήρη έκταση.',
           'Αστρονομική αντίστροφη περιστροφή στην κάθοδο.'
+        ]
+      }
+    },
+    {
+      id: 'bentOverDumbbells',
+      s: '3 sets · 12-15 reps',
+      n: { en: 'Bent-Over Dumbbell Lateral Raise', el: 'Σκυφτές Πλάγιες Άρσεις με Αλτήρες' },
+      m: { en: 'Rear Delts, Upper Back', el: 'Πίσω Δελτοειδείς, Άνω Πλάτη' },
+      media: {
+        male: 'exercises/shoulders/lateral-raises/bent-over-dumbbells-male.webm',
+        female: ''
+      },
+      targets: [
+        { k: 'groupShoulders', p: 80, en: 'Rear Deltoids', el: 'Πίσω Δελτοειδείς' },
+        { k: 'groupMidBack', p: 20, en: 'Rhomboids & Traps', el: 'Ρομβοειδείς & Τραπεζοειδείς' }
+      ],
+      t: {
+        en: [
+          'Hinge forward at your hips with a flat back and slight knee bend.',
+          'Hold dumbbells beneath you with palms facing each other.',
+          'Raise your arms out to the sides, squeezing your rear delts.',
+          'Lower the weights under strict control back to the start.'
+        ],
+        el: [
+          'Κάντε κάμψη μπροστά από τα ισχία με ίσια πλάτη και ελαφριά κάμψη στα γόνατα.',
+          'Κρατήστε τους αλτήρες κάτω με τις παλάμες να κοιτάζουν η μία την άλλη.',
+          'Σηκώστε τα χέρια στα πλάγια σφίγγοντας τους πίσω δελτοειδείς.',
+          'Κατεβάστε τα βάρη με αυστηρό έλεγχο στην αρχική θέση.'
         ]
       }
     }
