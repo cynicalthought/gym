@@ -156,7 +156,7 @@ window.EXERCISE_CATEGORIES.core = {
       n: { en: 'Hanging Oblique Knee Raise', el: 'Πλάγιες Άρσεις Γοφών σε Μονόζυγο' },
       m: { en: 'Obliques, Lower Abs', el: 'Πλάγιοι Κοιλιακοί, Κάτω Κοιλιακοί' },
       media: {
-        male: 'exercises/core/hanging oblique knee raise exercise-male.webm',
+        male: 'exercises/core/twists/hanging oblique knee raise exercise-male.webm',
         female: ''
       },
       targets: [

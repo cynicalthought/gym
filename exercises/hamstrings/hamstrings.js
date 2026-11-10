@@ -1,41 +1,41 @@
 window.EXERCISE_CATEGORIES = window.EXERCISE_CATEGORIES || {};
 window.EXERCISE_CATEGORIES.hamstrings = {
-  name: { en: 'Hamstrings', el: 'Οπίσθιοι Μηριαίοι' },
+  name: { en: 'Hamstrings', el: 'Δικέφαλοι Μηριαίοι' },
   desc: { 
-    en: 'Protect your knees and build powerful leg curls with Romanian deadlifts and stretches.',
-    el: 'Προστατέψτε τα γόνατα και χτίστε ισχυρούς δικεφάλους μηριαίους με RDLs.' 
+    en: 'Strengthen the posterior chain, knee flexion, and hip extension with targeted hamstring movements.',
+    el: 'Ενδυναμώστε το πίσω μέρος των μηρών και την έκταση των ισχίων.' 
   },
-  icon: '<path d="M25 36h8l-2 12-3 10h-4l-1-12zm10 0h8l1 10-1 12h-4l-3-10z"/>',
-  image: 'media/hamstrings/image.webp',
+  icon: '<path d="M18 16h12v16H18z"/>',
+  image: 'exercises/hamstrings/image.jpeg',
   folder: 'hamstrings',
   targets: ['groupHamstrings'],
   exercises: [
     {
-      id: 'rdl',
+      id: 'barbellRdl',
       s: '3 sets · 8-10 reps',
-      n: { en: 'Romanian Deadlift (RDL)', el: 'Άρσεις Θανάτου με Τεντωμένα Πόδια (RDL)' },
-      m: { en: 'Hamstrings, Glutes, Lower back', el: 'Οπίσθιοι Μηριαίοι, Γλουτοί, Κάτω Πλάτη' },
+      n: { en: 'Barbell Romanian Deadlift', el: 'Romanian Deadlift με Μπάρα' },
+      m: { en: 'Hamstrings, Glutes', el: 'Δικέφαλοι Μηριαίοι, Γλουτοί' },
       media: {
-        male: 'media/hamstrings/romanian-deadlifts/barbell-male.gif',
-        female: 'media/hamstrings/romanian-deadlifts/dumbbells-female.webm'
+        male: 'exercises/hamstrings/romanian-deadlifts/dumbbells-female.webm',
+        female: ''
       },
       targets: [
-        { k: 'groupHamstrings', p: 60, en: 'Hamstrings', el: 'Οπίσθιοι Μηριαίοι' },
-        { k: 'groupGlutes', p: 25, en: 'Glutes', el: 'Γλουτοί' },
-        { k: 'groupMidBack', p: 15, en: 'Erector Spinae', el: 'Εκτείνοντες Ράχης' }
+        { k: 'groupHamstrings', p: 60, en: 'Hamstrings', el: 'Δικέφαλοι Μηριαίοι' },
+        { k: 'groupGlutes', p: 30, en: 'Gluteus Maximus', el: 'Μέγιστος Γλουτιαίος' },
+        { k: 'groupLowerBack', p: 10, en: 'Lower Back', el: 'Κάτω Ραχιαίοι' }
       ],
       t: {
         en: [
-          'Maintain a slight bend in your knees throughout.',
-          'Hinge backward at your hips, pushing your glutes out.',
-          'Keep the bar or dumbbells gliding close to your shins.',
-          'Feel a deep stretch in your hamstrings before returning.'
+          'Stand holding a barbell with a shoulder-width overhand grip.',
+          'Keep a slight bend in your knees and hinge at your hips, pushing your glutes back.',
+          'Lower the bar along your shins until you feel a deep stretch in your hamstrings.',
+          'Drive your hips forward to return to the starting position.'
         ],
         el: [
-          'Διατηρήστε μια ελαφριά κάμψη στα γόνατα σε όλη τη διάρκεια.',
-          'Σπρώξτε τους γοφούς σας προς τα πίσω.',
-          'Κρατήστε τη μπάρα ή τους αλτήρες κοντά στις κνήμες σας.',
-          'Νιώστε βαθιά διάταση στους μηριαίους πριν επανέλθετε.'
+          'Σταθείτε κρατώντας μια μπάρα με πρηνής λαβή στο φάρδος των ώμων.',
+          'Κρατήστε μια ελαφριά κάμψη στα γόνατα και κάντε κάμψη από τα ισχία σπρώχνοντας τους γλουτούς πίσω.',
+          'Κατεβάστε τη μπάρα κατά μήκος των κνημών μέχρι να νιώσετε βαθιά διάταση.',
+          'Ωθήστε τη λεκάνη προς τα εμπρός για να επιστρέψετε στην αρχική θέση.'
         ]
       }
     }

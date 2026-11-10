@@ -6,7 +6,7 @@ window.EXERCISE_CATEGORIES['lower-back'] = {
     el: 'Ενισχύστε τους εκτείνοντες της σπονδυλικής στήλης για αποφυγή τραυματισμών και σωστή στάση.' 
   },
   icon: '<path d="M20 26q12-6 24 0l-2 10q-10-4-20 0z"/>',
-  image: 'media/lower-back/image.webp',
+  image: 'exercises/lower-back/image.jpg',
   folder: 'lower-back',
   targets: ['groupLowerBack'],
   exercises: [
@@ -16,8 +16,8 @@ window.EXERCISE_CATEGORIES['lower-back'] = {
       n: { en: 'Hyperextensions (Back Extensions)', el: 'Εκτάσεις Ράχης (Hyperextensions)' },
       m: { en: 'Lower Back, Glutes, Hamstrings', el: 'Κάτω Πλάτη, Γλουτοί, Οπίσθιοι Μηριαίοι' },
       media: {
-        male: '',
-        female: 'media/lower-back/45-degree back extension-female.webm'
+        male: 'exercises/lower-back/45-degree back extension-male.webm',
+        female: 'exercises/lower-back/45-degree back extension-female.webm'
       },
       targets: [
         { k: 'groupLowerBack', p: 65, en: 'Erector Spinae', el: 'Εκτείνοντες Ράχης' },

@@ -336,11 +336,21 @@ function exerciseCard(ex, group = null) {
 }
 
 function categoryImageSrc(group) {
-  const key = group.replace('group', '').toLowerCase();
-  const cat = EXERCISE_CATEGORIES[key] || EXERCISE_CATEGORIES[Object.keys(EXERCISE_CATEGORIES).find(k => k.toLowerCase() === key)];
+  // groupLowerBack → LowerBack → lower-back
+  const raw = group.replace(/^group/, '');
+  const kebab = raw
+    .replace(/([a-z])([A-Z])/g, '$1-$2')
+    .toLowerCase(); // "lower-back"
+
+  const cat =
+    EXERCISE_CATEGORIES[kebab] ||
+    EXERCISE_CATEGORIES[raw.toLowerCase()] ||
+    EXERCISE_CATEGORIES[Object.keys(EXERCISE_CATEGORIES).find(
+      k => k.toLowerCase() === kebab || k.toLowerCase() === raw.toLowerCase()
+    )];
+
   return cat ? cat.image : '';
 }
-
 function categoryIcon(group) {
   const imgSrc = categoryImageSrc(group);
   if (imgSrc) {

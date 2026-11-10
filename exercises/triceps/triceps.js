@@ -6,7 +6,7 @@ window.EXERCISE_CATEGORIES.triceps = {
     el: 'Προσθέστε τεράστιο όγκο και δύναμη στα χέρια με πιέσεις και τροχαλίες τρικεφάλων.' 
   },
   icon: '<path d="M18 21q5-3 8 2l-2 11-5 2-4-7zm30 0q-5-3-8 2l2 11 5 2 4-7z"/>',
-  image: 'media/triceps/image.webp',
+  image: 'exercises/triceps/image.webp',
   folder: 'triceps',
   targets: ['groupTriceps'],
   exercises: [

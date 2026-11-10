@@ -6,7 +6,7 @@ window.EXERCISE_CATEGORIES.shoulders = {
     el: 'Χτίστε εντυπωσιακούς ώμους 3D και σταθερότητα πάνω από το κεφάλι με πιέσεις.' 
   },
   icon: '<path d="M19 17q6-6 12 0l-2 9-8 2-5-5zm26 0q-6-6-12 0l2 9 8 2 5-5z"/>',
-  image: 'media/shoulders/image.webp',
+  image: 'exercises/shoulders/image.avif',
   folder: 'shoulders',
   targets: ['groupShoulders'],
   exercises: [
