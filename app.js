@@ -86,6 +86,22 @@ Object.keys(EXERCISE_CATEGORIES).forEach(key => {
   I18.el['desc' + camelKey.replace('group', '')] = cat.desc.el;
 });
 
+// Upgraded muscle icons for pie-chart callouts (24x24 viewBox paths)
+const UPGRADED_ICONS = {
+  groupBiceps: `<path d="M7 18V9a3 3 0 0 1 6 0v2"/><path d="M13 11h2a2 2 0 0 1 2 2v5"/><circle cx="10" cy="7" r="1.5"/>`,
+  groupCalves: `<path d="M9 4v8c0 2 1 4 3 6"/><path d="M15 4v8c0 2-1 4-3 6"/><path d="M8 20h8"/>`,
+  groupChest: `<path d="M4 10c2-3 6-4 8-4s6 1 8 4v4c-2 2-6 3-8 3s-6-1-8-3v-4z"/>`,
+  groupCore: `<rect x="8" y="4" width="8" height="16" rx="2"/><path d="M8 9h8M8 14h8"/>`,
+  groupGlutes: `<path d="M8 12c0-2 1.5-4 4-4s4 2 4 4v6H8v-6z"/><path d="M7 11c-1.5-1-2-3-1-4.5M17 11c1.5-1 2-3 1-4.5"/>`,
+  groupHamstrings: `<path d="M9 4v16M15 4v16"/><path d="M9 12c2 1 4 1 6 0"/>`,
+  groupLowerBack: `<path d="M12 3v18"/><path d="M9 7h6M9 12h6M9 17h6"/><path d="M8 20c2 1 6 1 8 0"/>`,
+  groupMidBack: `<path d="M12 4v16"/><path d="M12 8c-4 2-6 5-6 9M12 8c4 2 6 5 6 9"/>`,
+  groupQuads: `<path d="M8 5v14M16 5v14"/><path d="M8 10h8M8 15h8"/>`,
+  groupShoulders: `<circle cx="12" cy="10" r="4"/><path d="M6 14l-2 5M18 14l2 5"/><path d="M4 12h2M18 12h2"/>`,
+  groupTriceps: `<path d="M12 4v16"/><path d="M8 8c0 4 1.5 7 4 10M16 8c0 4-1.5 7-4 10"/>`
+};
+Object.assign(CATEGORY_ICONS, UPGRADED_ICONS);
+
 // Define Day Workouts mapping from modular exercise IDs
 const exerciseMap = {};
 Object.values(EXERCISE_CATEGORIES).forEach(cat => {
@@ -138,7 +154,7 @@ function targetBreakdown(ex) {
   const badgeId = `pieBadge${++pieBadgeCounter}`;
   const items = ex.targets.map((tg, index) => ({ tg, index, color: TARGET_COLORS[index % TARGET_COLORS.length] }));
   
-  const cx = 380, cy = 230, r = 115, depth = 16;
+  const cx = 380, cy = 250, r = 110, depth = 14;
   
   const sectorPath = (start, end) => {
     const a = start * Math.PI / 180, b = end * Math.PI / 180;
@@ -160,68 +176,76 @@ function targetBreakdown(ex) {
   const extrusion = sectors.map(({ path, color, dx, dy }) => `<path d="${path}" transform="translate(${dx} ${dy + depth})" fill="${color}" opacity=".42" stroke="#0e1417" stroke-width="1.8" stroke-linejoin="round"/>`).join('');
   const slices = sectors.map(({ path, color, dx, dy }) => `<path d="${path}" transform="translate(${dx} ${dy})" fill="${color}" stroke="#0e1417" stroke-width="1.8" stroke-linejoin="round" filter="drop-shadow(0 3px 5px rgba(0,0,0,.35))"/>`).join('');
 
+  // ---- Label layout (HTML foreignObject = reliable EN/EL wrapping) ----
   const leftItems = sectors.filter(s => Math.cos(s.midAngle * Math.PI / 180) < 0);
   const rightItems = sectors.filter(s => Math.cos(s.midAngle * Math.PI / 180) >= 0);
-
   leftItems.sort((a, b) => (a.ay + a.dy) - (b.ay + b.dy));
   rightItems.sort((a, b) => (a.ay + a.dy) - (b.ay + b.dy));
 
-  let formattedSectors = [];
-  const totalH = 460;
-  const pillHBox = 48;
-  const minGap = pillHBox + 16;
+  const totalH = 480;
+  const pillW = 200;
+  const pillH = 56;
+  const minGap = pillH + 16;
+  const leftX = 16;
+  const rightX = 760 - 16 - pillW; // viewBox width 760
 
-  let currentLeftY = 45;
-  leftItems.forEach((item, idx) => {
-    const idealY = 45 + idx * ((totalH - 90) / Math.max(1, leftItems.length)) + 25;
-    const labelY = Math.max(currentLeftY, Math.min(totalH - 55, idealY));
-    formattedSectors.push({ ...item, labelY, textX: 45, textAnchor: 'start', isRight: false });
-    currentLeftY = labelY + minGap;
-  });
+  const placeColumn = (list, isRight) => {
+    const formatted = [];
+    let y = 36;
+    const n = Math.max(1, list.length);
+    const span = totalH - 72;
+    list.forEach((item, idx) => {
+      const ideal = 36 + idx * (span / n) + 20;
+      const labelY = Math.max(y, Math.min(totalH - pillH - 16, ideal));
+      formatted.push({ ...item, labelY, isRight });
+      y = labelY + minGap;
+    });
+    return formatted;
+  };
 
-  let currentRightY = 45;
-  rightItems.forEach((item, idx) => {
-    const idealY = 45 + idx * ((totalH - 90) / Math.max(1, rightItems.length)) + 25;
-    const labelY = Math.max(currentRightY, Math.min(totalH - 55, idealY));
-    formattedSectors.push({ ...item, labelY, textX: 715, textAnchor: 'end', isRight: true });
-    currentRightY = labelY + minGap;
-  });
+  const formattedSectors = [
+    ...placeColumn(leftItems, false),
+    ...placeColumn(rightItems, true)
+  ];
 
   const linkedTargets = formattedSectors.map(item => {
     const startX = item.ax + item.dx;
     const startY = item.ay + item.dy;
-    const elbowX = item.isRight ? 535 : 225;
-    const textAnchorX = item.isRight ? 715 : 45;
-    const targetY = item.labelY - 2;
+    const pillX = item.isRight ? rightX : leftX;
+    const endX = item.isRight ? pillX : pillX + pillW;
+    const targetY = item.labelY + pillH / 2;
+    const elbowX = item.isRight ? pillX - 18 : pillX + pillW + 18;
     return `
-      <circle cx="${startX}" cy="${startY}" r="4" fill="#fff" stroke="${item.color}" stroke-width="2"/>
-      <path d="M ${startX} ${startY} L ${elbowX} ${targetY} H ${textAnchorX}" fill="none" stroke="${item.color}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".9"/>
+      <circle cx="${startX}" cy="${startY}" r="3.5" fill="#0e1417" stroke="${item.color}" stroke-width="2"/>
+      <path d="M ${startX} ${startY} L ${elbowX} ${targetY} H ${endX}" fill="none" stroke="${item.color}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".7"/>
     `;
   }).join('');
 
   const labelRows = formattedSectors.map(item => {
-    const name = item.tg[lang] || item.tg.en;
-    const pillW = 175;
-    const pillX = item.isRight ? item.textX - pillW : item.textX;
-    const pillY = item.labelY - 22;
+    const name = (item.tg[lang] || item.tg.en || '').trim();
+    const pillX = item.isRight ? rightX : leftX;
+    const pillY = item.labelY;
     const iconPath = CATEGORY_ICONS[item.tg.k] || CATEGORY_ICONS.groupChest;
-    const iconGroupX = pillX + 10;
-    const textStartX = pillX + 50;
-
+    // Escape for HTML
+    const safeName = name.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     return `
-      <rect x="${pillX}" y="${pillY}" width="${pillW}" height="${pillHBox}" rx="12" fill="rgba(22, 30, 34, 0.96)" stroke="${item.color}" stroke-opacity="0.5" stroke-width="1.5"/>
-      <g transform="translate(${iconGroupX}, ${item.labelY - 14})" fill="none" stroke="${item.color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect width="28" height="28" rx="7" fill="rgba(121,217,187,0.12)" stroke="${item.color}" stroke-opacity="0.6"/>
-        <g transform="translate(3,3) scale(0.75)" fill="${item.color}" stroke="none">${iconPath || ''}</g>
+      <rect x="${pillX}" y="${pillY}" width="${pillW}" height="${pillH}" rx="12" fill="rgba(14,20,23,0.96)" stroke="${item.color}" stroke-opacity="0.45" stroke-width="1.4"/>
+      <g transform="translate(${pillX + 10}, ${pillY + 15})">
+        <rect width="26" height="26" rx="7" fill="rgba(121,217,187,0.12)" stroke="${item.color}" stroke-opacity="0.5" stroke-width="1.3"/>
+        <g transform="translate(1,1)" fill="none" stroke="${item.color}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${iconPath || ''}</g>
       </g>
-      <text class="chart-callout-name" x="${textStartX}" y="${item.labelY - 3}" text-anchor="start" font-size="14" font-weight="750" fill="#f0f5f3">${name}</text>
-      <text class="chart-callout-share" x="${textStartX}" y="${item.labelY + 17}" text-anchor="start" font-size="13" font-weight="850" fill="#a4e8d2">${item.tg.p}%</text>
+      <foreignObject x="${pillX + 42}" y="${pillY + 6}" width="${pillW - 52}" height="${pillH - 12}">
+        <div xmlns="http://www.w3.org/1999/xhtml" style="display:flex;flex-direction:column;justify-content:center;height:100%;overflow:hidden;font-family:Inter,system-ui,sans-serif;line-height:1.2;">
+          <div style="color:#f0f5f3;font-weight:700;font-size:12px;overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;word-break:break-word;hyphens:auto;">${safeName}</div>
+          <div style="color:#a4e8d2;font-weight:800;font-size:12px;margin-top:2px;">${item.tg.p}%</div>
+        </div>
+      </foreignObject>
     `;
   }).join('');
 
   const label = items.map(({ tg }) => `${tg[lang] || tg.en} ${tg.p}%`).join(', ');
 
-  return `<section class="target-breakdown" aria-label="${t('targetDistribution')}"><h3 class="visual-panel-title">${t('panelTargets')}</h3><div class="pie-chart"><svg viewBox="0 0 760 460" role="img" aria-label="Muscle target distribution. ${label}"><defs><linearGradient id="${badgeId}Rim" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a9cfc0"/><stop offset=".48" stop-color="#40544f"/><stop offset="1" stop-color="#101618"/></linearGradient><radialGradient id="${badgeId}Face" cx=".3" cy=".22" r=".9"><stop stop-color="#30413e"/><stop offset="1" stop-color="#141c1e"/></radialGradient></defs><ellipse cx="${cx}" cy="${cy + 16}" rx="96" ry="88" fill="#000" opacity=".28"/>${extrusion}${slices}${linkedTargets}${labelRows}<g class="pie-center-badge" aria-hidden="true"><circle class="pie-center-rim" style="fill:url(#${badgeId}Rim)" cx="${cx}" cy="${cy}" r="28"/><circle class="pie-center-face" style="fill:url(#${badgeId}Face)" cx="${cx}" cy="${cy}" r="24"/><path class="pie-center-mark" d="M ${cx - 10} ${cy - 12} v12 c0 13 20 13 20 0 v-12"/></g></svg></div></section>`;
+  return `<section class="target-breakdown" aria-label="${t('targetDistribution')}"><h3 class="visual-panel-title">${t('panelTargets')}</h3><div class="pie-chart"><svg viewBox="0 0 760 500" role="img" aria-label="Muscle target distribution. ${label}"><defs><linearGradient id="${badgeId}Rim" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a9cfc0"/><stop offset=".48" stop-color="#40544f"/><stop offset="1" stop-color="#101618"/></linearGradient><radialGradient id="${badgeId}Face" cx=".3" cy=".22" r=".9"><stop stop-color="#30413e"/><stop offset="1" stop-color="#141c1e"/></radialGradient></defs><ellipse cx="${cx}" cy="${cy + 16}" rx="96" ry="88" fill="#000" opacity=".28"/>${extrusion}${slices}${linkedTargets}${labelRows}<g class="pie-center-badge" aria-hidden="true"><circle class="pie-center-rim" style="fill:url(#${badgeId}Rim)" cx="${cx}" cy="${cy}" r="26"/><circle class="pie-center-face" style="fill:url(#${badgeId}Face)" cx="${cx}" cy="${cy}" r="22"/><text x="${cx}" y="${cy + 5}" text-anchor="middle" font-size="13" font-weight="800" fill="#d8f2e8" font-family="Inter,system-ui,sans-serif">${items.length}</text></g></svg></div></section>`;
 }
 
 let lang = localStorage.getItem('apexLang') || 'en';
@@ -260,7 +284,8 @@ function mediaHTML(ex, g) {
 }
 
 let libraryOpen = localStorage.getItem('apexView') === 'library';
-let activeLibraryGroup = null;
+let activeLibraryGroup = localStorage.getItem('apexLibraryGroup') || null;
+let activeDay = localStorage.getItem('apexDay') || '1';
 
 const CATEGORY_TARGETS_MAP = {
   groupBiceps: ['groupBiceps'],
@@ -444,17 +469,19 @@ const libraryTab = $('#libraryTab');
 if (scheduleTab) scheduleTab.onclick = () => { libraryOpen = false; localStorage.setItem('apexView', 'schedule'); apply() };
 if (libraryTab) libraryTab.onclick = () => { libraryOpen = true; localStorage.setItem('apexView', 'library'); apply() };
 const searchInput = $('#exerciseSearch');
-if (searchInput) searchInput.oninput = () => { activeLibraryGroup = null; draw() };
+if (searchInput) searchInput.oninput = () => { activeLibraryGroup = null; localStorage.removeItem('apexLibraryGroup'); draw() };
 const categoryNavEl = $('#categoryNav');
-if (categoryNavEl) categoryNavEl.onclick = e => { const btn = e.target.closest('.category-link'); if (!btn) return; $('#exerciseSearch').value = ''; activeLibraryGroup = btn.dataset.group; draw(); $('#allExercises').scrollIntoView({ behavior: 'smooth', block: 'start' }) };
+if (categoryNavEl) categoryNavEl.onclick = e => { const btn = e.target.closest('.category-link'); if (!btn) return; $('#exerciseSearch').value = ''; activeLibraryGroup = btn.dataset.group; localStorage.setItem('apexLibraryGroup', activeLibraryGroup); draw(); $('#allExercises').scrollIntoView({ behavior: 'smooth', block: 'start' }) };
 
 const daysEl = $('#days');
 if (daysEl) daysEl.onclick = e => {
   const btn = e.target.closest('.day-card'); if (!btn) return;
+  activeDay = btn.dataset.d;
+  localStorage.setItem('apexDay', activeDay);
   $$('.day-card').forEach(x => x.classList.remove('on'));
   btn.classList.add('on');
   $$('.panel').forEach(p => p.classList.remove('on'));
-  const panel = $('#p' + btn.dataset.d);
+  const panel = $('#p' + activeDay);
   if (panel) panel.classList.add('on');
 };
 
@@ -497,4 +524,15 @@ if (tt) tt.onclick = () => {
 const tReset = $('#tReset');
 if (tReset) tReset.onclick = () => { if (IV) { clearInterval(IV); IV = null; if (tt) tt.textContent = t('start') } R = S; upd() };
 
+
+// Restore schedule day from storage
+function restoreDay() {
+  const d = activeDay || '1';
+  $$('.day-card').forEach(x => x.classList.toggle('on', x.dataset.d === d));
+  $$('.panel').forEach(p => p.classList.remove('on'));
+  const panel = $('#p' + d);
+  if (panel) panel.classList.add('on');
+}
+
+restoreDay();
 apply();
