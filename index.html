@@ -86,7 +86,7 @@ body{
 .library-search input:focus{border-color:rgba(121,217,187,.6);box-shadow:0 0 0 3px rgba(121,217,187,.08)}
 .library-search::before{content:'⌕';position:absolute;left:1rem;top:.55rem;color:var(--faint);font-size:1.3rem}
 
-/* Category Navigation Cards with Larger Images and Descriptions */
+/* Category Navigation Cards */
 .category-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin-top:1rem}
 @media(max-width:820px){.category-nav{grid-template-columns:1fr}}
 .category-link{
@@ -300,8 +300,20 @@ footer{
   </div>
 </div>
 
-<!-- Script inclusions -->
-<script src="exercises.js"></script>
+<!-- Modular Muscle Scripts -->
+<script src="exercises/biceps/biceps.js"></script>
+<script src="exercises/calves/calves.js"></script>
+<script src="exercises/chest/chest.js"></script>
+<script src="exercises/core/core.js"></script>
+<script src="exercises/glutes/glutes.js"></script>
+<script src="exercises/hamstrings/hamstrings.js"></script>
+<script src="exercises/lower-back/lower-back.js"></script>
+<script src="exercises/mid-back/mid-back.js"></script>
+<script src="exercises/quads/quads.js"></script>
+<script src="exercises/shoulders/shoulders.js"></script>
+<script src="exercises/triceps/triceps.js"></script>
+
+<!-- App Logic -->
 <script src="app.js"></script>
 </body>
 </html>

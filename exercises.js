@@ -14,7 +14,7 @@ const CATEGORY_ICONS = {
   groupMidBack: '<path d="M23 18q9-5 18 0l-2 12-7 5-7-5z"/>',
   groupQuads: '<path d="M25 36h8l-2 12-3 10h-4l-1-12zm10 0h8l1 10-1 12h-4l-3-10z"/>',
   groupShoulders: '<path d="M19 17q6-6 12 0l-2 9-8 2-5-5zm26 0q-6-6-12 0l2 9 8 2 5-5z"/>',
-  groupTriceps: '<path d="M18 21q5-3 8 2l-2 11-5 2-4-7zm30 0q-5-3-8 2l2 11 5 2 4-7 z"/>'
+  groupTriceps: '<path d="M18 21q5-3 8 2l-2 11-5 2-4-7zm30 0q-5-3-8 2l2 11 5 2 4-7z"/>'
 };
 
 const TARGET_COLORS = ['#36d399', '#3b82f6', '#f59e0b', '#ec4899', '#8b5cf6', '#06b6d4', '#10b981'];
@@ -649,7 +649,7 @@ const LIBRARY_EXTRAS = [
     n: { en: 'Reverse Crunch', el: 'Ανάποδοι Κοιλιακοί' },
     m: { en: 'Lower Abs, Core', el: 'Κάτω Κοιλιακοί, Κορμός' },
     media: {
-      male: 'media/core/crunches/reverse-crunch-male.webm',
+      male: 'video_4.webm',
       female: 'media/core/crunches/reverse-crunch-female.webm'
     },
     targets: [
@@ -702,7 +702,7 @@ const LIBRARY_EXTRAS = [
     m: { en: 'Lower Abs, Core', el: 'Κάτω Κοιλιακοί, Κορμός' },
     media: {
       male: 'video_1.webm',
-      female: 'video_1.webm'
+      female: 'video_2.webm'
     },
     targets: [
       { k: 'groupCore', p: 80, en: 'Lower Abdominals', el: 'Κάτω Κοιλιακοί' },
@@ -718,6 +718,34 @@ const LIBRARY_EXTRAS = [
         'Ξαπλώστε ανάσκελα με τα χέρια σας τοποθετημένα σταθερά κάτω από τους γοφούς.',
         'Κρατήστε τα πόδια τεντωμένα και σηκώστε τα αργά μέχρι να γίνουν κάθετα.',
         'Χαμηλώστε τα πόδια με έλεγχο χωρίς να αφήσετε τη μέση να ξεκολλήσει από το πάτωμα.'
+      ]
+    }
+  },
+  {
+    id: 'fullSitUps',
+    s: '3 sets · 12-15 reps',
+    n: { en: 'Full Sit-Ups', el: 'Πλήρεις Κοιλιακοί (Sit-Ups)' },
+    m: { en: 'Upper Abs, Core, Hip Flexors', el: 'Άνω Κοιλιακοί, Κορμός, Καμπτήρες Ισχίου' },
+    media: {
+      male: 'video_3.webm',
+      female: 'video_3.webm'
+    },
+    targets: [
+      { k: 'groupCore', p: 75, en: 'Abdominals', el: 'Κοιλιακοί' },
+      { k: 'groupCore', p: 25, en: 'Hip Flexors', el: 'Καμπτήρες Ισχίου' }
+    ],
+    t: {
+      en: [
+        'Lie on your back with knees bent and feet flat on the floor.',
+        'Place your hands lightly behind your ears or across your chest.',
+        'Engage your core and lift your upper body completely toward your knees.',
+        'Lower back down under control.'
+      ],
+      el: [
+        'Ξαπλώστε ανάσκελα με λυγισμένα γόνατα και τα πόδια επίπεδα στο πάτωμα.',
+        'Τοποθετήστε τα χέρια ελαφρά πίσω από τα αυτιά ή σταυρωτά στο στήθος.',
+        'Ενεργοποιήστε τον κορμό και σηκώστε ολόκληρο το πάνω μέρος προς τα γόνατα.',
+        'Κατεβείτε ξανά κάτω με έλεγχο.'
       ]
     }
   },
@@ -800,6 +828,62 @@ const LIBRARY_EXTRAS = [
         'Ακουμπήστε την άνω πλάτη σταθερά σε πάγκο.',
         'Πιέστε από τις φτέρνες για να σηκώσετε τους γοφούς.',
         'Σφίξτε δυνατά τους γλουτούς στην κορυφή.'
+      ]
+    }
+  },
+  {
+    id: 'seatedConcentrationCurl',
+    s: '3 sets · 10-12 reps',
+    n: { en: 'Seated Concentration Curl', el: 'Κάμψεις Συγκέντρωσης Καθιστός' },
+    m: { en: 'Biceps Peak, Brachialis', el: 'Κορυφή Δικεφάλων, Βραχιόνιος' },
+    media: {
+      male: 'concentration-curls-male.webm',
+      female: 'concentration-curls-male.webm'
+    },
+    targets: [
+      { k: 'groupBiceps', p: 85, en: 'Biceps Brachii (Peak)', el: 'Δικέφαλος Βραχιόνιος (Κορυφή)' },
+      { k: 'groupBiceps', p: 15, en: 'Brachialis', el: 'Βραχιόνιος' }
+    ],
+    t: {
+      en: [
+        'Sit on a flat bench with legs spread and elbow braced against your inner thigh.',
+        'Curl the weight upward toward your chest in a smooth arc.',
+        'Squeeze hard at the peak contraction for one second.',
+        'Lower the dumbbell slowly to full arm extension.'
+      ],
+      el: [
+        'Καθίστε σε ίσιο πάγκο με τα πόδια ανοιχτά και τον αγκώνα στηριγμένο στο εσωτερικό του μηρού.',
+        'Ανεβάστε το βάρος προς το στήθος με ομαλή κίνηση.',
+        'Σφίξτε δυνατά στην κορυφή της σύσπασης για ένα δευτερόλεπτο.',
+        'Κατεβάστε τον αλτήρα αργά μέχρι πλήρη έκταση του χεριού.'
+      ]
+    }
+  },
+  {
+    id: 'seatedEzBarConcentrationCurl',
+    s: '3 sets · 10-12 reps',
+    n: { en: 'Seated EZ-Bar Concentration Curl', el: 'Κάμψεις Δικεφάλων με EZ-Bar Καθιστός' },
+    m: { en: 'Biceps, Forearms', el: 'Δικέφαλοι, Πήχεις' },
+    media: {
+      male: 'seated-EZ-bar-concentration-curl-male.webm',
+      female: 'seated-EZ-bar-concentration-curl-male.webm'
+    },
+    targets: [
+      { k: 'groupBiceps', p: 80, en: 'Biceps Brachii', el: 'Δικέφαλος Βραχιόνιος' },
+      { k: 'groupBiceps', p: 20, en: 'Brachioradialis', el: 'Βραχιoκερκιδικός' }
+    ],
+    t: {
+      en: [
+        'Sit upright on a flat bench holding an EZ-curl bar with an underhand grip.',
+        'Keep your upper arms stationary and close to your torso.',
+        'Curl the bar upward toward your shoulders, emphasizing the bicep squeeze.',
+        'Lower the bar under control back to the starting position.'
+      ],
+      el: [
+        'Καθίστε όρθια σε ίσιο πάγκο κρατώντας μια μπάρα EZ με ανάποδη λαβή.',
+        'Κρατήστε τα μπράτσα σας σταθερά και κοντά στον κορμό.',
+        'Ανεβάστε τη μπάρα προς τους ώμους, δίνοντας έμφαση στη σύσπαση.',
+        'Κατεβάστε τη μπάρα με έλεγχο πίσω στην αρχική θέση.'
       ]
     }
   }
