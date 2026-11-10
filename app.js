@@ -235,9 +235,9 @@ function targetBreakdown(ex) {
         <g transform="translate(4,4) scale(1.5)" fill="none" stroke="${item.color}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${iconPath || ''}</g>
       </g>
       <foreignObject x="${pillX + 72}" y="${pillY + 10}" width="${pillW - 88}" height="${pillH - 20}">
-        <div xmlns="http://www.w3.org/1999/xhtml" style="display:flex;flex-direction:column;justify-content:center;height:100%;overflow:hidden;font-family:Inter,system-ui,sans-serif;line-height:1.25;padding-right:4px;">
-          <div style="color:#f0f5f3;font-weight:750;font-size:18px;overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;word-break:break-word;hyphens:auto;">${safeName}</div>
-          <div style="color:#a4e8d2;font-weight:800;font-size:20px;margin-top:4px;letter-spacing:0.02em;">${item.tg.p}%</div>
+        <div class="pie-label" xmlns="http://www.w3.org/1999/xhtml" style="display:flex;flex-direction:column;justify-content:center;height:100%;overflow:hidden;font-family:Inter,system-ui,sans-serif;line-height:1.25;padding-right:4px;">
+          <div class="pie-label-name" style="color:#f0f5f3;font-weight:750;font-size:18px;overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;word-break:break-word;hyphens:auto;">${safeName}</div>
+          <div class="pie-label-pct" style="color:#a4e8d2;font-weight:800;font-size:20px;margin-top:4px;letter-spacing:0.02em;">${item.tg.p}%</div>
         </div>
       </foreignObject>
     `;
