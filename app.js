@@ -154,7 +154,7 @@ function targetBreakdown(ex) {
   const badgeId = `pieBadge${++pieBadgeCounter}`;
   const items = ex.targets.map((tg, index) => ({ tg, index, color: TARGET_COLORS[index % TARGET_COLORS.length] }));
   
-  const cx = 420, cy = 280, r = 130, depth = 16;
+  const cx = 550, cy = 360, r = 170, depth = 16;
   
   const sectorPath = (start, end) => {
     const a = start * Math.PI / 180, b = end * Math.PI / 180;
@@ -176,68 +176,73 @@ function targetBreakdown(ex) {
   const extrusion = sectors.map(({ path, color, dx, dy }) => `<path d="${path}" transform="translate(${dx} ${dy + depth})" fill="${color}" opacity=".42" stroke="#0e1417" stroke-width="1.8" stroke-linejoin="round"/>`).join('');
   const slices = sectors.map(({ path, color, dx, dy }) => `<path d="${path}" transform="translate(${dx} ${dy})" fill="${color}" stroke="#0e1417" stroke-width="1.8" stroke-linejoin="round" filter="drop-shadow(0 3px 5px rgba(0,0,0,.35))"/>`).join('');
 
-  // ---- Label layout (HTML foreignObject = reliable EN/EL wrapping) ----
-  const leftItems = sectors.filter(s => Math.cos(s.midAngle * Math.PI / 180) < 0);
-  const rightItems = sectors.filter(s => Math.cos(s.midAngle * Math.PI / 180) >= 0);
-  leftItems.sort((a, b) => (a.ay + a.dy) - (b.ay + b.dy));
-  rightItems.sort((a, b) => (a.ay + a.dy) - (b.ay + b.dy));
+  // ---- Label layout: place near each slice (no forced L/R symmetry) ----
+  const viewW = 1100, viewH = 720;
+  const pillW = 340;
+  const pillH = 130;
+  const labelR = r + 95; // distance from pie center to label anchor
 
-  const totalH = 560;
-  const pillW = 280;
-  const pillH = 96;
-  const minGap = pillH + 20;
-  const leftX = 20;
-  const rightX = 900 - 20 - pillW; // viewBox width 900
+  // Initial position from slice mid-angle
+  let rawLabels = sectors.map(item => {
+    const rad = item.midAngle * Math.PI / 180;
+    let lx = cx + labelR * Math.cos(rad);
+    let ly = cy + labelR * Math.sin(rad);
+    // Prefer label so pie sits toward center: shift outward box
+    const isRight = Math.cos(rad) >= 0;
+    let pillX = isRight ? lx : lx - pillW;
+    let pillY = ly - pillH / 2;
+    // Clamp inside viewBox
+    pillX = Math.max(12, Math.min(viewW - pillW - 12, pillX));
+    pillY = Math.max(12, Math.min(viewH - pillH - 12, pillY));
+    return { ...item, pillX, pillY, isRight, lx, ly };
+  });
 
-  const placeColumn = (list, isRight) => {
-    const formatted = [];
-    let y = 28;
-    const n = Math.max(1, list.length);
-    const span = totalH - 100;
-    list.forEach((item, idx) => {
-      const ideal = 28 + idx * (span / n) + 24;
-      const labelY = Math.max(y, Math.min(totalH - pillH - 16, ideal));
-      formatted.push({ ...item, labelY, isRight });
-      y = labelY + minGap;
+  // Resolve vertical overlaps (simple iterative separation)
+  rawLabels.sort((a, b) => a.pillY - b.pillY);
+  for (let pass = 0; pass < 4; pass++) {
+    for (let i = 1; i < rawLabels.length; i++) {
+      const prev = rawLabels[i - 1];
+      const cur = rawLabels[i];
+      // Only separate if horizontally overlapping enough to collide
+      const overlapX = Math.min(prev.pillX + pillW, cur.pillX + pillW) - Math.max(prev.pillX, cur.pillX);
+      if (overlapX > pillW * 0.35) {
+        const minY = prev.pillY + pillH + 14;
+        if (cur.pillY < minY) cur.pillY = minY;
+      }
+    }
+    // Clamp again after push
+    rawLabels.forEach(L => {
+      L.pillY = Math.max(12, Math.min(viewH - pillH - 12, L.pillY));
     });
-    return formatted;
-  };
+  }
 
-  const formattedSectors = [
-    ...placeColumn(leftItems, false),
-    ...placeColumn(rightItems, true)
-  ];
-
-  const linkedTargets = formattedSectors.map(item => {
+  const linkedTargets = rawLabels.map(item => {
     const startX = item.ax + item.dx;
     const startY = item.ay + item.dy;
-    const pillX = item.isRight ? rightX : leftX;
-    const endX = item.isRight ? pillX : pillX + pillW;
-    const targetY = item.labelY + pillH / 2;
-    const elbowX = item.isRight ? pillX - 24 : pillX + pillW + 24;
+    const endX = item.isRight ? item.pillX : item.pillX + pillW;
+    const endY = item.pillY + pillH / 2;
     return `
       <circle cx="${startX}" cy="${startY}" r="3.5" fill="#0e1417" stroke="${item.color}" stroke-width="2"/>
-      <path d="M ${startX} ${startY} L ${elbowX} ${targetY} H ${endX}" fill="none" stroke="${item.color}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".7"/>
+      <path d="M ${startX} ${startY} L ${endX} ${endY}" fill="none" stroke="${item.color}" stroke-width="1.7" stroke-linecap="round" stroke-opacity=".7"/>
     `;
   }).join('');
 
-  const labelRows = formattedSectors.map(item => {
+  const labelRows = rawLabels.map(item => {
     const name = (item.tg[lang] || item.tg.en || '').trim();
-    const pillX = item.isRight ? rightX : leftX;
-    const pillY = item.labelY;
+    const pillX = item.pillX;
+    const pillY = item.pillY;
     const iconPath = CATEGORY_ICONS[item.tg.k] || CATEGORY_ICONS.groupChest;
-    // Escape for HTML
     const safeName = name.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     return `
-      <rect x="${pillX}" y="${pillY}" width="${pillW}" height="${pillH}" rx="18" fill="rgba(14,20,23,0.97)" stroke="${item.color}" stroke-opacity="0.5" stroke-width="2"/>
-      <g transform="translate(${pillX + 16}, ${pillY + (pillH - 44) / 2})">
-        <rect width="44" height="44" rx="12" fill="rgba(121,217,187,0.14)" stroke="${item.color}" stroke-opacity="0.55" stroke-width="1.6"/>
-        <g transform="translate(4,4) scale(1.5)" fill="none" stroke="${item.color}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${iconPath || ''}</g>
+      <rect x="${pillX}" y="${pillY}" width="${pillW}" height="${pillH}" rx="22" fill="rgba(14,20,23,0.97)" stroke="${item.color}" stroke-opacity="0.55" stroke-width="2.4"/>
+      <g transform="translate(${pillX + 18}, ${pillY + (pillH - 72) / 2})">
+        <rect width="72" height="72" rx="18" fill="rgba(121,217,187,0.14)" stroke="${item.color}" stroke-opacity="0.6" stroke-width="2"/>
+        <g transform="translate(6,6) scale(2.5)" fill="none" stroke="${item.color}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${iconPath || ''}</g>
       </g>
-      <foreignObject x="${pillX + 72}" y="${pillY + 10}" width="${pillW - 88}" height="${pillH - 20}">
-        <div class="pie-label" xmlns="http://www.w3.org/1999/xhtml" style="display:flex;flex-direction:column;justify-content:center;height:100%;overflow:hidden;font-family:Inter,system-ui,sans-serif;line-height:1.25;padding-right:4px;">
-          <div class="pie-label-name" style="color:#f0f5f3;font-weight:750;font-size:18px;overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;word-break:break-word;hyphens:auto;">${safeName}</div>
-          <div class="pie-label-pct" style="color:#a4e8d2;font-weight:800;font-size:20px;margin-top:4px;letter-spacing:0.02em;">${item.tg.p}%</div>
+      <foreignObject x="${pillX + 104}" y="${pillY + 14}" width="${pillW - 122}" height="${pillH - 28}">
+        <div class="pie-label" xmlns="http://www.w3.org/1999/xhtml" style="display:flex;flex-direction:column;justify-content:center;height:100%;overflow:hidden;font-family:Inter,system-ui,sans-serif;line-height:1.2;padding-right:6px;">
+          <div class="pie-label-name" style="color:#f0f5f3;font-weight:750;font-size:26px;overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;word-break:break-word;">${safeName}</div>
+          <div class="pie-label-pct" style="color:#a4e8d2;font-weight:800;font-size:30px;margin-top:6px;">${item.tg.p}%</div>
         </div>
       </foreignObject>
     `;
@@ -245,7 +250,7 @@ function targetBreakdown(ex) {
 
   const label = items.map(({ tg }) => `${tg[lang] || tg.en} ${tg.p}%`).join(', ');
 
-  return `<section class="target-breakdown" aria-label="${t('targetDistribution')}"><h3 class="visual-panel-title">${t('panelTargets')}</h3><div class="pie-chart"><svg viewBox="0 0 900 600" role="img" aria-label="Muscle target distribution. ${label}"><defs><linearGradient id="${badgeId}Rim" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a9cfc0"/><stop offset=".48" stop-color="#40544f"/><stop offset="1" stop-color="#101618"/></linearGradient><radialGradient id="${badgeId}Face" cx=".3" cy=".22" r=".9"><stop stop-color="#30413e"/><stop offset="1" stop-color="#141c1e"/></radialGradient></defs><ellipse cx="${cx}" cy="${cy + 16}" rx="96" ry="88" fill="#000" opacity=".28"/>${extrusion}${slices}${linkedTargets}${labelRows}<g class="pie-center-badge" aria-hidden="true"><circle class="pie-center-rim" style="fill:url(#${badgeId}Rim)" cx="${cx}" cy="${cy}" r="26"/><circle class="pie-center-face" style="fill:url(#${badgeId}Face)" cx="${cx}" cy="${cy}" r="22"/><text x="${cx}" y="${cy + 7}" text-anchor="middle" font-size="18" font-weight="800" fill="#d8f2e8" font-family="Inter,system-ui,sans-serif">${items.length}</text></g></svg></div></section>`;
+  return `<section class="target-breakdown" aria-label="${t('targetDistribution')}"><h3 class="visual-panel-title">${t('panelTargets')}</h3><div class="pie-chart"><svg viewBox="0 0 1100 720" role="img" aria-label="Muscle target distribution. ${label}"><defs><linearGradient id="${badgeId}Rim" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a9cfc0"/><stop offset=".48" stop-color="#40544f"/><stop offset="1" stop-color="#101618"/></linearGradient><radialGradient id="${badgeId}Face" cx=".3" cy=".22" r=".9"><stop stop-color="#30413e"/><stop offset="1" stop-color="#141c1e"/></radialGradient></defs><ellipse cx="${cx}" cy="${cy + 16}" rx="140" ry="125" fill="#000" opacity=".28"/>${extrusion}${slices}${linkedTargets}${labelRows}<g class="pie-center-badge" aria-hidden="true"><circle class="pie-center-rim" style="fill:url(#${badgeId}Rim)" cx="${cx}" cy="${cy}" r="36"/><circle class="pie-center-face" style="fill:url(#${badgeId}Face)" cx="${cx}" cy="${cy}" r="31"/><text x="${cx}" y="${cy + 9}" text-anchor="middle" font-size="22" font-weight="800" fill="#d8f2e8" font-family="Inter,system-ui,sans-serif">${items.length}</text></g></svg></div></section>`;
 }
 
 let lang = localStorage.getItem('apexLang') || 'en';
