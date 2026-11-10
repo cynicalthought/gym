@@ -1,3 +1,137 @@
+// ============================================================
+// APP.JS — Modular Application Logic & UI Controller
+// ============================================================
+
+const EXERCISE_CATEGORIES = window.EXERCISE_CATEGORIES || {};
+
+const CATEGORY_ICONS = {};
+const CATEGORY_TARGETS = {};
+const CATEGORY_FOLDER = {};
+const TARGET_COLORS = ['#36d399', '#3b82f6', '#f59e0b', '#ec4899', '#8b5cf6', '#06b6d4', '#10b981'];
+
+const I18 = {
+  en: {
+    schedule: 'Schedule',
+    library: 'Exercise library',
+    timer: 'Rest timer',
+    rt: 'Rest Timer',
+    rs: 'Between sets',
+    reset: 'Reset',
+    start: 'Start',
+    close: 'Close',
+    d1: 'Back & Biceps',
+    d2: 'Chest & Triceps',
+    d3: 'Legs',
+    d4: 'Shoulders',
+    libraryTitle: 'All exercises',
+    libraryDescription: 'Browse every exercise in your plan and watch its demonstration.',
+    searchExercises: 'Search exercises or muscles',
+    libraryPrompt: 'Choose a muscle group above or search for an exercise.',
+    resultCount: 'exercises',
+    targetDistribution: 'Muscle target distribution',
+    panelTargets: 'Target muscles',
+    demo: 'Demonstration',
+    tips: 'Form cues',
+    male: 'Male',
+    female: 'Female',
+    footer: 'Form first · Consistency always'
+  },
+  el: {
+    schedule: 'Πρόγραμμα',
+    library: 'Βιβλιοθήκη ασκήσεων',
+    timer: 'Χρονόμετρο',
+    rt: 'Χρονόμετρο Ξεκούρασης',
+    rs: 'Μεταξύ σετ',
+    reset: 'Επαναφορά',
+    start: 'Εκκίνηση',
+    close: 'Κλείσιμο',
+    d1: 'Πλάτη & Δικέφαλοι',
+    d2: 'Στήθος & Τρικέφαλοι',
+    d3: 'Πόδια',
+    d4: 'Ώμοι',
+    libraryTitle: 'Όλες οι ασκήσεις',
+    libraryDescription: 'Περιηγηθείτε σε κάθε άσκηση του προγράμματός σας και δείτε την επίδειξη.',
+    searchExercises: 'Αναζήτηση ασκήσεων ή μυών',
+    libraryPrompt: 'Επιλέξτε μια μυϊκή ομάδα παραπάνω ή αναζητήστε μια άσκηση.',
+    resultCount: 'ασκήσεις',
+    targetDistribution: 'Κατανομή μυϊκών στόχων',
+    panelTargets: 'Στοχευμένοι μυς',
+    demo: 'Επίδειξη',
+    tips: 'Οδηγίες εκτέλεσης',
+    male: 'Άνδρας',
+    female: 'Γυναίκα',
+    footer: 'Η φόρμα προηγείται · Η συνέπεια μετράει'
+  }
+};
+
+// Populate categories from window.EXERCISE_CATEGORIES
+Object.keys(EXERCISE_CATEGORIES).forEach(key => {
+  const cat = EXERCISE_CATEGORIES[key];
+  CATEGORY_ICONS['group' + key.charAt(0).toUpperCase() + key.slice(1)] = cat.icon;
+  // Handle kebab-case keys like lower-back -> groupLowerBack, mid-back -> groupMidBack
+  const camelKey = 'group' + key.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('');
+  CATEGORY_ICONS[camelKey] = cat.icon;
+  CATEGORY_TARGETS[camelKey] = cat.targets;
+  CATEGORY_FOLDER[camelKey] = cat.folder;
+
+  // Add translations for categories
+  I18.en['group' + key.charAt(0).toUpperCase() + key.slice(1)] = cat.name.en;
+  I18.el['group' + key.charAt(0).toUpperCase() + key.slice(1)] = cat.name.el;
+  I18.en[camelKey] = cat.name.en;
+  I18.el[camelKey] = cat.name.el;
+
+  I18.en['desc' + key.charAt(0).toUpperCase() + key.slice(1)] = cat.desc.en;
+  I18.el['desc' + key.charAt(0).toUpperCase() + key.slice(1)] = cat.desc.el;
+  I18.en['desc' + camelKey.replace('group', '')] = cat.desc.en;
+  I18.el['desc' + camelKey.replace('group', '')] = cat.desc.el;
+});
+
+// Define Day Workouts mapping from modular exercise IDs
+const exerciseMap = {};
+Object.values(EXERCISE_CATEGORIES).forEach(cat => {
+  cat.exercises.forEach(ex => {
+    exerciseMap[ex.id] = ex;
+  });
+});
+
+const D = {
+  1: [
+    exerciseMap['seatedCableRow'],
+    exerciseMap['pullUps'],
+    exerciseMap['dumbbellCurl'],
+    exerciseMap['preacherCurl']
+  ].filter(Boolean),
+  2: [
+    exerciseMap['benchPress'],
+    exerciseMap['inclinePress'],
+    exerciseMap['pushUps'],
+    exerciseMap['pushdown']
+  ].filter(Boolean),
+  3: [
+    exerciseMap['squat'],
+    exerciseMap['rdl'],
+    exerciseMap['legPress'],
+    exerciseMap['standingCalfRaise']
+  ].filter(Boolean),
+  4: [
+    exerciseMap['overheadPress'],
+    exerciseMap['lateralRaises'],
+    exerciseMap['facePulls'],
+    exerciseMap['arnoldPress']
+  ].filter(Boolean)
+};
+
+const LIBRARY_EXTRAS = [];
+Object.values(EXERCISE_CATEGORIES).forEach(cat => {
+  cat.exercises.forEach(ex => {
+    // Collect extra exercises not explicitly primary in D
+    const inD = Object.values(D).some(dayList => dayList.some(item => item.id === ex.id));
+    if (!inD) {
+      LIBRARY_EXTRAS.push(ex);
+    }
+  });
+});
+
 let pieBadgeCounter = 0;
 
 function targetBreakdown(ex) {
@@ -70,7 +204,7 @@ function targetBreakdown(ex) {
     const pillW = 175;
     const pillX = item.isRight ? item.textX - pillW : item.textX;
     const pillY = item.labelY - 22;
-    const iconPath = CATEGORY_ICONS[item.tg.k] || CATEGORY_ICONS.chest;
+    const iconPath = CATEGORY_ICONS[item.tg.k] || CATEGORY_ICONS.groupChest;
     const iconGroupX = pillX + 10;
     const textStartX = pillX + 50;
 
@@ -78,7 +212,7 @@ function targetBreakdown(ex) {
       <rect x="${pillX}" y="${pillY}" width="${pillW}" height="${pillHBox}" rx="12" fill="rgba(22, 30, 34, 0.96)" stroke="${item.color}" stroke-opacity="0.5" stroke-width="1.5"/>
       <g transform="translate(${iconGroupX}, ${item.labelY - 14})" fill="none" stroke="${item.color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <rect width="28" height="28" rx="7" fill="rgba(121,217,187,0.12)" stroke="${item.color}" stroke-opacity="0.6"/>
-        <g transform="translate(3,3) scale(0.75)" fill="${item.color}" stroke="none">${iconPath}</g>
+        <g transform="translate(3,3) scale(0.75)" fill="${item.color}" stroke="none">${iconPath || ''}</g>
       </g>
       <text class="chart-callout-name" x="${textStartX}" y="${item.labelY - 3}" text-anchor="start" font-size="14" font-weight="750" fill="#f0f5f3">${name}</text>
       <text class="chart-callout-share" x="${textStartX}" y="${item.labelY + 17}" text-anchor="start" font-size="13" font-weight="850" fill="#a4e8d2">${item.tg.p}%</text>
@@ -109,9 +243,7 @@ function apply() {
 }
 
 function mediaHTML(ex, g) {
-  const m = (ex.mediaKey && window.MEDIA && window.MEDIA[ex.mediaKey])
-    ? window.MEDIA[ex.mediaKey]
-    : (ex.media || null);
+  const m = ex.media || null;
   if (!m) return '<p style="color:#6a6a78;text-align:center;padding:2rem">—</p>';
   const primary = g === 'female' ? (m.female || m.male) : (m.male || m.female);
   const fallback = g === 'female' ? m.male : m.female;
@@ -130,14 +262,61 @@ function mediaHTML(ex, g) {
 let libraryOpen = localStorage.getItem('apexView') === 'library';
 let activeLibraryGroup = null;
 
-function categoryTargets(ex, group) { return ex.targets.filter(target => CATEGORY_TARGETS[group].includes(target.k)).sort((a, b) => b.p - a.p); }
+const CATEGORY_TARGETS_MAP = {
+  groupBiceps: ['groupBiceps'],
+  groupChest: ['groupChest'],
+  groupCore: ['groupCore'],
+  groupCalves: ['groupCalves'],
+  groupGlutes: ['groupGlutes'],
+  groupHamstrings: ['groupHamstrings'],
+  groupLowerBack: ['groupLowerBack'],
+  groupMidBack: ['groupMidBack'],
+  groupQuads: ['groupQuads'],
+  groupShoulders: ['groupShoulders'],
+  groupTriceps: ['groupTriceps']
+};
+
+const CATEGORY_FOLDER_MAP = {
+  groupBiceps: 'biceps',
+  groupChest: 'chest',
+  groupCore: 'core',
+  groupCalves: 'calves',
+  groupGlutes: 'glutes',
+  groupHamstrings: 'hamstrings',
+  groupLowerBack: 'lower-back',
+  groupMidBack: 'mid-back',
+  groupQuads: 'quads',
+  groupShoulders: 'shoulders',
+  groupTriceps: 'triceps'
+};
+
+function categoryTargets(ex, group) { return ex.targets.filter(target => CATEGORY_TARGETS_MAP[group].includes(target.k)).sort((a, b) => b.p - a.p); }
 function categoryTarget(ex, group) { return categoryTargets(ex, group)[0] || null; }
 function categoryShare(ex, group) { return categoryTarget(ex, group)?.p || 0; }
 function highestTargetShare(ex) { return Math.max(0, ...ex.targets.map(target => target.p)); }
 function isTiedTopTarget(ex, group) { const top = highestTargetShare(ex); return top > 0 && categoryTargets(ex, group).some(target => target.p === top); }
-function mediaFolder(ex) { const paths = window.MEDIA && window.MEDIA[ex.mediaKey]; const path = paths && (paths.male || paths.female) || ''; return path.split('/')[1] || ''; }
-function allLibraryExercises() { return Object.values(D).flat().concat(LIBRARY_EXTRAS); }
-function exercisesForGroup(group) { return allLibraryExercises().filter(ex => mediaFolder(ex) === CATEGORY_FOLDER[group] || isTiedTopTarget(ex, group)).sort((a, b) => categoryShare(b, group) - categoryShare(a, group) || a.n.en.localeCompare(b.n.en)); }
+function mediaFolder(ex) { 
+  const paths = ex.media; 
+  const path = paths && (paths.male || paths.female) || ''; 
+  return path.split('/')[1] || ''; 
+}
+
+function allLibraryExercises() {
+  const list = [];
+  Object.values(EXERCISE_CATEGORIES).forEach(cat => {
+    cat.exercises.forEach(ex => {
+      if (!list.some(item => item.id === ex.id)) {
+        list.push(ex);
+      }
+    });
+  });
+  return list;
+}
+
+function exercisesForGroup(group) { 
+  const folderName = CATEGORY_FOLDER_MAP[group];
+  return allLibraryExercises().filter(ex => mediaFolder(ex) === folderName || isTiedTopTarget(ex, group)).sort((a, b) => categoryShare(b, group) - categoryShare(a, group) || a.n.en.localeCompare(b.n.en)); 
+}
 
 function exerciseCard(ex, group = null) {
   const g = exGender[ex.id] || 'male';
@@ -157,20 +336,9 @@ function exerciseCard(ex, group = null) {
 }
 
 function categoryImageSrc(group) {
-  const imageMap = {
-    groupBiceps: 'media/biceps/image.webp',
-    groupCalves: 'media/calves/image.avif',
-    groupChest: 'media/chest/image.avif',
-    groupCore: 'media/core/image.webp',
-    groupGlutes: 'media/glutes/image.jpg',
-    groupHamstrings: 'media/hamstrings/image.jpeg',
-    groupLowerBack: 'media/lower-back/image.webp',
-    groupMidBack: 'media/mid-back/image.webp',
-    groupQuads: 'media/quads/image.webp',
-    groupShoulders: 'media/shoulders/image.avif',
-    groupTriceps: 'media/triceps/image.webp'
-  };
-  return imageMap[group] || '';
+  const key = group.replace('group', '').toLowerCase();
+  const cat = EXERCISE_CATEGORIES[key] || EXERCISE_CATEGORIES[Object.keys(EXERCISE_CATEGORIES).find(k => k.toLowerCase() === key)];
+  return cat ? cat.image : '';
 }
 
 function categoryIcon(group) {
@@ -183,77 +351,101 @@ function categoryIcon(group) {
 
 function draw() {
   for (let d = 1; d <= 4; d++) {
-    const box = $('#e' + d); box.innerHTML = ''; D[d].forEach(ex => box.appendChild(exerciseCard(ex)));
+    const box = $('#e' + d); 
+    if (box) {
+      box.innerHTML = ''; 
+      (D[d] || []).forEach(ex => box.appendChild(exerciseCard(ex)));
+    }
   }
-  const all = $('#allExercises'); all.innerHTML = '';
+  const all = $('#allExercises'); 
+  if (!all) return;
+  all.innerHTML = '';
   
-  // Alphabetically ranked group order including Lower Back
   const groupOrder = ['groupBiceps', 'groupCalves', 'groupChest', 'groupCore', 'groupGlutes', 'groupHamstrings', 'groupLowerBack', 'groupMidBack', 'groupQuads', 'groupShoulders', 'groupTriceps'];
   
   const query = $('#exerciseSearch').value.trim();
-  const categoryNav = $('#categoryNav'); categoryNav.innerHTML = '';
-  groupOrder.forEach(group => {
-    const exercises = exercisesForGroup(group);
-    const descKey = 'desc' + group.replace('group', '');
-    const description = t(descKey);
+  const categoryNav = $('#categoryNav'); 
+  if (categoryNav) {
+    categoryNav.innerHTML = '';
+    groupOrder.forEach(group => {
+      const exercises = exercisesForGroup(group);
+      const descKey = 'desc' + group.replace('group', '');
+      const description = t(descKey);
 
-    const navButton = document.createElement('button'); 
-    navButton.className = 'category-link' + (activeLibraryGroup === group ? ' selected' : ''); 
-    navButton.type = 'button'; 
-    navButton.dataset.group = group;
-    
-    navButton.innerHTML = `
-      ${categoryIcon(group)}
-      <span class="category-link-text">
-        <span class="category-link-name">${t(group)}</span>
-        <span class="category-link-count">${exercises.length} ${t('resultCount')}</span>
-        <span class="category-link-desc">${description}</span>
-      </span>`; 
-    categoryNav.appendChild(navButton);
+      const navButton = document.createElement('button'); 
+      navButton.className = 'category-link' + (activeLibraryGroup === group ? ' selected' : ''); 
+      navButton.type = 'button'; 
+      navButton.dataset.group = group;
+      
+      navButton.innerHTML = `
+        ${categoryIcon(group)}
+        <span class="category-link-text">
+          <span class="category-link-name">${t(group)}</span>
+          <span class="category-link-count">${exercises.length} ${t('resultCount')}</span>
+          <span class="category-link-desc">${description}</span>
+        </span>`; 
+      categoryNav.appendChild(navButton);
 
-    if (!exercises.length || (!query && activeLibraryGroup !== group)) return;
-    if (activeLibraryGroup === group && !query) {
-      const section = document.createElement('section'); section.className = 'library-group library-results-group'; section.dataset.fullView = 'true';
-      section.innerHTML = `<div class="library-full-heading"><span class="library-group-title">${categoryIcon(group)}<span>${t(group)}</span></span><span class="library-count">${exercises.length} ${t('resultCount')}</span></div><div class="ex-grid"></div>`;
-      const grid = section.querySelector('.ex-grid'); exercises.forEach(ex => grid.appendChild(exerciseCard(ex, group))); all.appendChild(section); return;
-    }
-    const section = document.createElement('details'); section.className = 'library-group'; section.id = `library-${group}`; section.open = true;
-    section.innerHTML = `<summary><span class="library-group-title">${categoryIcon(group)}<span>${t(group)}</span></span><span class="library-count">${exercises.length} ${t('resultCount')}</span></summary><div class="library-exercises"></div>`;
-    const list = section.querySelector('.library-exercises');
-    exercises.forEach(ex => {
-      const item = document.createElement('details'); item.className = 'library-exercise';
-      item.dataset.search = `${ex.n.en} ${ex.n.el} ${ex.m.en} ${ex.m.el} ${ex.targets.map(target => target.en + ' ' + target.el).join(' ')}`.toLocaleLowerCase();
-      item.innerHTML = `<summary><span class="library-exercise-name">${ex.n[lang]}</span><span class="library-exercise-meta"><span>${ex.m[lang]}</span><span>${categoryShare(ex, group)}%</span><span>${ex.s}</span></span></summary>`;
-      item.appendChild(exerciseCard(ex, group)); list.appendChild(item);
-    }); all.appendChild(section);
-  });
-  const search = $('#exerciseSearch'); search.placeholder = t('searchExercises'); search.setAttribute('aria-label', t('searchExercises'));
+      if (!exercises.length || (!query && activeLibraryGroup !== group)) return;
+      if (activeLibraryGroup === group && !query) {
+        const section = document.createElement('section'); section.className = 'library-group library-results-group'; section.dataset.fullView = 'true';
+        section.innerHTML = `<div class="library-full-heading"><span class="library-group-title">${categoryIcon(group)}<span>${t(group)}</span></span><span class="library-count">${exercises.length} ${t('resultCount')}</span></div><div class="ex-grid"></div>`;
+        const grid = section.querySelector('.ex-grid'); exercises.forEach(ex => grid.appendChild(exerciseCard(ex, group))); all.appendChild(section); return;
+      }
+      const section = document.createElement('details'); section.className = 'library-group'; section.id = `library-${group}`; section.open = true;
+      section.innerHTML = `<summary><span class="library-group-title">${categoryIcon(group)}<span>${t(group)}</span></span><span class="library-count">${exercises.length} ${t('resultCount')}</span></summary><div class="library-exercises"></div>`;
+      const list = section.querySelector('.library-exercises');
+      exercises.forEach(ex => {
+        const item = document.createElement('details'); item.className = 'library-exercise';
+        item.dataset.search = `${ex.n.en} ${ex.n.el} ${ex.m.en} ${ex.m.el} ${ex.targets.map(target => target.en + ' ' + target.el).join(' ')}`.toLocaleLowerCase();
+        item.innerHTML = `<summary><span class="library-exercise-name">${ex.n[lang]}</span><span class="library-exercise-meta"><span>${ex.m[lang]}</span><span>${categoryShare(ex, group)}%</span><span>${ex.s}</span></span></summary>`;
+        item.appendChild(exerciseCard(ex, group)); list.appendChild(item);
+      }); all.appendChild(section);
+    });
+  }
+  const search = $('#exerciseSearch');
+  if (search) {
+    search.placeholder = t('searchExercises'); 
+    search.setAttribute('aria-label', t('searchExercises'));
+  }
   filterLibrary();
 }
 
 function filterLibrary() {
-  const query = $('#exerciseSearch').value.trim().toLocaleLowerCase(); let count = 0;
+  const searchInput = $('#exerciseSearch');
+  if (!searchInput) return;
+  const query = searchInput.value.trim().toLocaleLowerCase(); let count = 0;
   $$('.library-group').forEach(group => {
     if (group.dataset.fullView === 'true') { count += group.querySelectorAll('.ex').length; return }
     let groupCount = 0;
     group.querySelectorAll('.library-exercise').forEach(item => { const matches = !query || item.dataset.search.includes(query); item.hidden = !matches; if (matches) groupCount++; if (query && matches) item.open = true });
-    group.hidden = groupCount === 0; count += groupCount; group.querySelector('.library-count').textContent = `${groupCount} ${t('resultCount')}`;
+    group.hidden = groupCount === 0; count += groupCount; 
+    const countEl = group.querySelector('.library-count');
+    if (countEl) countEl.textContent = `${groupCount} ${t('resultCount')}`;
   });
-  $('#libraryResults').textContent = query ? `${count} ${t('resultCount')}` : '';
-  $('#libraryPrompt').hidden = !!query || !!activeLibraryGroup;
+  const resultsEl = $('#libraryResults');
+  if (resultsEl) resultsEl.textContent = query ? `${count} ${t('resultCount')}` : '';
+  const promptEl = $('#libraryPrompt');
+  if (promptEl) promptEl.hidden = !!query || !!activeLibraryGroup;
 }
 
-$('#scheduleTab').onclick = () => { libraryOpen = false; localStorage.setItem('apexView', 'schedule'); apply() };
-$('#libraryTab').onclick = () => { libraryOpen = true; localStorage.setItem('apexView', 'library'); apply() };
-$('#exerciseSearch').oninput = () => { activeLibraryGroup = null; draw() };
-$('#categoryNav').onclick = e => { const btn = e.target.closest('.category-link'); if (!btn) return; $('#exerciseSearch').value = ''; activeLibraryGroup = btn.dataset.group; draw(); $('#allExercises').scrollIntoView({ behavior: 'smooth', block: 'start' }) };
+const scheduleTab = $('#scheduleTab');
+const libraryTab = $('#libraryTab');
+if (scheduleTab) scheduleTab.onclick = () => { libraryOpen = false; localStorage.setItem('apexView', 'schedule'); apply() };
+if (libraryTab) libraryTab.onclick = () => { libraryOpen = true; localStorage.setItem('apexView', 'library'); apply() };
+const searchInput = $('#exerciseSearch');
+if (searchInput) searchInput.oninput = () => { activeLibraryGroup = null; draw() };
+const categoryNavEl = $('#categoryNav');
+if (categoryNavEl) categoryNavEl.onclick = e => { const btn = e.target.closest('.category-link'); if (!btn) return; $('#exerciseSearch').value = ''; activeLibraryGroup = btn.dataset.group; draw(); $('#allExercises').scrollIntoView({ behavior: 'smooth', block: 'start' }) };
 
-$('#days').onclick = e => {
+const daysEl = $('#days');
+if (daysEl) daysEl.onclick = e => {
   const btn = e.target.closest('.day-card'); if (!btn) return;
   $$('.day-card').forEach(x => x.classList.remove('on'));
   btn.classList.add('on');
   $$('.panel').forEach(p => p.classList.remove('on'));
-  $('#p' + btn.dataset.d).classList.add('on');
+  const panel = $('#p' + btn.dataset.d);
+  if (panel) panel.classList.add('on');
 };
 
 document.onclick = e => {
@@ -265,29 +457,34 @@ document.onclick = e => {
   const mediaBox = gb.closest('.ex').querySelector('[data-media="' + id + '"]');
   let ex = null;
   for (const day of Object.values(D)) { const f = day.find(x => x.id === id); if (f) { ex = f; break } }
+  if (!ex) { ex = allLibraryExercises().find(x => x.id === id); }
   if (ex && mediaBox) mediaBox.innerHTML = mediaHTML(ex, g);
 };
 
-$('#languageSelect').onchange = e => { lang = e.target.value; localStorage.setItem('apexLang', lang); apply() };
+const langSelect = $('#languageSelect');
+if (langSelect) langSelect.onchange = e => { lang = e.target.value; localStorage.setItem('apexLang', lang); apply() };
 
 let S = 90, R = 90, IV = null;
 const ov = $('#ov'), clk = $('#clk'), tt = $('#tToggle');
 const fmt = s => Math.floor(s / 60) + ':' + (s % 60).toString().padStart(2, '0');
-const upd = () => clk.textContent = fmt(R);
-$('#timerBtn').onclick = () => ov.classList.add('show');
-$('#tClose').onclick = () => ov.classList.remove('show');
-ov.onclick = e => { if (e.target === ov) ov.classList.remove('show') };
+const upd = () => { if (clk) clk.textContent = fmt(R); };
+const timerBtn = $('#timerBtn');
+if (timerBtn) timerBtn.onclick = () => ov && ov.classList.add('show');
+const tClose = $('#tClose');
+if (tClose) tClose.onclick = () => ov && ov.classList.remove('show');
+if (ov) ov.onclick = e => { if (e.target === ov) ov.classList.remove('show') };
 $$('.pre').forEach(b => b.onclick = () => {
   $$('.pre').forEach(x => x.classList.remove('on')); b.classList.add('on');
-  S = +b.dataset.s; R = S; if (IV) { clearInterval(IV); IV = null; tt.textContent = t('start') } upd();
+  S = +b.dataset.s; R = S; if (IV) { clearInterval(IV); IV = null; if (tt) tt.textContent = t('start') } upd();
 });
-tt.onclick = () => {
+if (tt) tt.onclick = () => {
   if (IV) { clearInterval(IV); IV = null; tt.textContent = t('start') }
   else {
     tt.textContent = lang === 'en' ? 'Pause' : 'Παύση';
     IV = setInterval(() => { R--; upd(); if (R <= 0) { clearInterval(IV); IV = null; tt.textContent = t('start'); R = S; upd(); navigator.vibrate && navigator.vibrate([180, 60, 180]) } }, 1000)
   }
 };
-$('#tReset').onclick = () => { if (IV) { clearInterval(IV); IV = null; tt.textContent = t('start') } R = S; upd() };
+const tReset = $('#tReset');
+if (tReset) tReset.onclick = () => { if (IV) { clearInterval(IV); IV = null; if (tt) tt.textContent = t('start') } R = S; upd() };
 
 apply();

@@ -4,7 +4,7 @@ function targetBreakdown(ex) {
   const badgeId = `pieBadge${++pieBadgeCounter}`;
   const items = ex.targets.map((tg, index) => ({ tg, index, color: TARGET_COLORS[index % TARGET_COLORS.length] }));
   
-  const cx = 380, cy = 230, r = 95, depth = 14;
+  const cx = 380, cy = 230, r = 115, depth = 16;
   
   const sectorPath = (start, end) => {
     const a = start * Math.PI / 180, b = end * Math.PI / 180;
@@ -16,59 +16,77 @@ function targetBreakdown(ex) {
   let angle = -90;
   const sectors = items.map(({ tg, color, index }) => {
     const start = angle, end = angle + 360 * tg.p / 100, path = sectorPath(start, end), mid = (start + end) / 2 * Math.PI / 180;
-    const explode = 5 + tg.p * .1, dx = explode * Math.cos(mid), dy = explode * Math.sin(mid);
+    const explode = 8 + tg.p * .14, dx = explode * Math.cos(mid), dy = explode * Math.sin(mid);
     const ax = cx + (r + explode) * Math.cos(mid), ay = cy + (r + explode) * Math.sin(mid);
     const sector = { tg, color, path, dx, dy, ax, ay, start, end, index, midAngle: (start + end) / 2 };
     angle = end;
     return sector;
   });
   
-  const extrusion = sectors.map(({ path, color, dx, dy }) => `<path d="${path}" transform="translate(${dx} ${dy + depth})" fill="${color}" opacity=".48" stroke="#101418" stroke-width="1.7" stroke-linejoin="round"/>`).join('');
-  const slices = sectors.map(({ path, color, dx, dy }) => `<path d="${path}" transform="translate(${dx} ${dy})" fill="${color}" stroke="#101418" stroke-width="1.7" stroke-linejoin="round" filter="drop-shadow(0 2px 3px rgba(0,0,0,.32))"/>`).join('');
+  const extrusion = sectors.map(({ path, color, dx, dy }) => `<path d="${path}" transform="translate(${dx} ${dy + depth})" fill="${color}" opacity=".42" stroke="#0e1417" stroke-width="1.8" stroke-linejoin="round"/>`).join('');
+  const slices = sectors.map(({ path, color, dx, dy }) => `<path d="${path}" transform="translate(${dx} ${dy})" fill="${color}" stroke="#0e1417" stroke-width="1.8" stroke-linejoin="round" filter="drop-shadow(0 3px 5px rgba(0,0,0,.35))"/>`).join('');
 
-  const leftItems = sectors.filter(s => Math.cos(s.midAngle * Math.PI / 180) < 0).sort((a, b) => a.midAngle - b.midAngle);
-  const rightItems = sectors.filter(s => Math.cos(s.midAngle * Math.PI / 180) >= 0).sort((a, b) => a.midAngle - b.midAngle);
+  const leftItems = sectors.filter(s => Math.cos(s.midAngle * Math.PI / 180) < 0);
+  const rightItems = sectors.filter(s => Math.cos(s.midAngle * Math.PI / 180) >= 0);
+
+  leftItems.sort((a, b) => (a.ay + a.dy) - (b.ay + b.dy));
+  rightItems.sort((a, b) => (a.ay + a.dy) - (b.ay + b.dy));
 
   let formattedSectors = [];
   const totalH = 460;
+  const minGap = 74;
 
-  const leftCount = Math.max(1, leftItems.length);
+  let currentY = 45;
   leftItems.forEach((item, idx) => {
-    const spacing = (totalH - 80) / leftCount;
-    const labelY = 50 + idx * spacing + spacing / 2;
-    formattedSectors.push({ ...item, labelY, textX: 65, textAnchor: 'start', isRight: false });
+    const idealY = 45 + idx * ((totalH - 90) / Math.max(1, leftItems.length)) + 25;
+    const labelY = Math.max(currentY, Math.min(totalH - 55, idealY));
+    formattedSectors.push({ ...item, labelY, textX: 45, textAnchor: 'start', isRight: false });
+    currentY = labelY + minGap;
   });
 
-  const rightCount = Math.max(1, rightItems.length);
+  currentY = 45;
   rightItems.forEach((item, idx) => {
-    const spacing = (totalH - 80) / rightCount;
-    const labelY = 50 + idx * spacing + spacing / 2;
-    formattedSectors.push({ ...item, labelY, textX: 695, textAnchor: 'end', isRight: true });
+    const idealY = 45 + idx * ((totalH - 90) / Math.max(1, rightItems.length)) + 25;
+    const labelY = Math.max(currentY, Math.min(totalH - 55, idealY));
+    formattedSectors.push({ ...item, labelY, textX: 715, textAnchor: 'end', isRight: true });
+    currentY = labelY + minGap;
   });
 
   const linkedTargets = formattedSectors.map(item => {
     const startX = item.ax + item.dx;
     const startY = item.ay + item.dy;
-    const elbowX = item.isRight ? 510 : 250;
-    const textAnchorX = item.isRight ? 530 : 230;
+    const elbowX = item.isRight ? 535 : 225;
+    const textAnchorX = item.isRight ? 715 : 45;
     const targetY = item.labelY - 2;
     return `
-      <circle cx="${startX}" cy="${startY}" r="3" fill="${item.color}" opacity="0.9"/>
-      <path d="M ${startX} ${startY} L ${elbowX} ${targetY} H ${textAnchorX}" fill="none" stroke="${item.color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".85"/>
+      <circle cx="${startX}" cy="${startY}" r="4" fill="#fff" stroke="${item.color}" stroke-width="2"/>
+      <path d="M ${startX} ${startY} L ${elbowX} ${targetY} H ${textAnchorX}" fill="none" stroke="${item.color}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".9"/>
     `;
   }).join('');
 
   const labelRows = formattedSectors.map(item => {
     const name = item.tg[lang] || item.tg.en;
+    const pillW = 165, pillH = 56;
+    const pillX = item.isRight ? item.textX - pillW : item.textX;
+    const pillY = item.labelY - 24;
+    const iconPath = CATEGORY_ICONS[item.tg.k] || CATEGORY_ICONS.chest;
+    const iconGroupX = pillX + 12;
+    const textStartX = pillX + 54;
+
     return `
-      <text class="chart-callout-name" x="${item.textX}" y="${item.labelY - 1}" text-anchor="${item.textAnchor}" font-size="18" font-weight="700">${name}</text>
-      <text class="chart-callout-share" x="${item.textX}" y="${item.labelY + 23}" text-anchor="${item.textAnchor}" font-size="16" font-weight="800">${item.tg.p}%</text>
+      <rect x="${pillX}" y="${pillY}" width="${pillW}" height="${pillH}" rx="14" fill="rgba(22, 30, 34, 0.94)" stroke="${item.color}" stroke-opacity="0.45" stroke-width="1.5"/>
+      <g transform="translate(${iconGroupX}, ${item.labelY - 16})" fill="none" stroke="${item.color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect width="32" height="32" rx="8" fill="rgba(121,217,187,0.12)" stroke="${item.color}" stroke-opacity="0.6"/>
+        <g transform="translate(4,4) scale(0.85)" fill="${item.color}" stroke="none">${iconPath}</g>
+      </g>
+      <text class="chart-callout-name" x="${textStartX}" y="${item.labelY - 3}" text-anchor="start" font-size="16" font-weight="750" fill="#f0f5f3">${name}</text>
+      <text class="chart-callout-share" x="${textStartX}" y="${item.labelY + 20}" text-anchor="start" font-size="15" font-weight="850" fill="#a4e8d2">${item.tg.p}%</text>
     `;
   }).join('');
 
   const label = items.map(({ tg }) => `${tg[lang] || tg.en} ${tg.p}%`).join(', ');
 
-  return `<section class="target-breakdown" aria-label="${t('targetDistribution')}"><h3 class="visual-panel-title">${t('panelTargets')}</h3><div class="pie-chart"><svg viewBox="0 0 760 460" role="img" aria-label="Muscle target distribution. ${label}"><defs><linearGradient id="${badgeId}Rim" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a9cfc0"/><stop offset=".48" stop-color="#40544f"/><stop offset="1" stop-color="#101618"/></linearGradient><radialGradient id="${badgeId}Face" cx=".3" cy=".22" r=".9"><stop stop-color="#30413e"/><stop offset="1" stop-color="#141c1e"/></radialGradient></defs><ellipse cx="${cx}" cy="${cy + 16}" rx="84" ry="78" fill="#000" opacity=".25"/>${extrusion}${slices}${linkedTargets}${labelRows}<g class="pie-center-badge" aria-hidden="true"><circle class="pie-center-rim" style="fill:url(#${badgeId}Rim)" cx="${cx}" cy="${cy}" r="26"/><circle class="pie-center-face" style="fill:url(#${badgeId}Face)" cx="${cx}" cy="${cy}" r="22.5"/><path class="pie-center-mark" d="M ${cx - 9} ${cy - 11} v11 c0 12 18 12 18 0 v-11"/></g></svg></div></section>`;
+  return `<section class="target-breakdown" aria-label="${t('targetDistribution')}"><h3 class="visual-panel-title">${t('panelTargets')}</h3><div class="pie-chart"><svg viewBox="0 0 760 460" role="img" aria-label="Muscle target distribution. ${label}"><defs><linearGradient id="${badgeId}Rim" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a9cfc0"/><stop offset=".48" stop-color="#40544f"/><stop offset="1" stop-color="#101618"/></linearGradient><radialGradient id="${badgeId}Face" cx=".3" cy=".22" r=".9"><stop stop-color="#30413e"/><stop offset="1" stop-color="#141c1e"/></radialGradient></defs><ellipse cx="${cx}" cy="${cy + 16}" rx="96" ry="88" fill="#000" opacity=".28"/>${extrusion}${slices}${linkedTargets}${labelRows}<g class="pie-center-badge" aria-hidden="true"><circle class="pie-center-rim" style="fill:url(#${badgeId}Rim)" cx="${cx}" cy="${cy}" r="28"/><circle class="pie-center-face" style="fill:url(#${badgeId}Face)" cx="${cx}" cy="${cy}" r="24"/><path class="pie-center-mark" d="M ${cx - 10} ${cy - 12} v12 c0 13 20 13 20 0 v-12"/></g></svg></div></section>`;
 }
 
 let lang = localStorage.getItem('apexLang') || 'en';
@@ -138,8 +156,29 @@ function exerciseCard(ex, group = null) {
 }
 
 function categoryIcon(group) {
-  const overlays = { groupCalves: '<path d="M27 42q5 1 9 0l-2 19-5 2-4-13Zm26 0q-5 1-9 0l2 19 5 2 4-13z"/>', groupCore: '<path d="M29 31h7v8h-7zm9 0h7v8h-7zm-9 10h7v8h-7zm9 0h7v8h-7z"/>', groupMidBack: '<path d="M23 18q9-5 18 0l-2 12-7 5-7-5z"/>', groupBiceps: '<path d="M19 22q-5 2-3 9l5 3 4-4-1-7zm26 0q5 2 3 9l-5 3-4-4 1-7z"/>', groupChest: '<path d="M25 18q6-4 10 1l-1 9q-6 3-10-1-2-5 1-9zm14 0q-6-4-10 1l1 9q6 3 10-1 2-5-1-9z"/>', groupTriceps: '<path d="M18 21q5-3 8 2l-2 11-5 2-4-7zm30 0q-5-3-8 2l2 11 5 2 4-7z"/>', groupGlutes: '<path d="M25 29q4-5 8-2l-1 10q-6 2-9-2zm14 0q-4-5-8-2l1 10q6 2 9-2z"/>', groupQuads: '<path d="M25 36h8l-2 12-3 10h-4l-1-12zm10 0h8l1 10-1 12h-4l-3-10z"/>', groupHamstrings: '<path d="M25 36h8l-2 12-3 10h-4l-1-12zm10 0h8l1 10-1 12h-4l-3-10 z"/>', groupShoulders: '<path d="M19 17q6-6 12 0l-2 9-8 2-5-5zm26 0q-6-6-12 0l2 9 8 2 5-5z"/>' };
-  return `<span class="category-icon" aria-hidden="true"><svg viewBox="0 0 64 64"><g fill="none" stroke="#879994" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="9" r="5"/><path d="M25 16q7-3 14 0l4 15-5 5 3 24M25 16l-4 15 5 5-3 24M21 22l-7 13m29-13 7 13"/></g><g fill="#79d9bb" opacity=".9">${overlays[group]}</g></svg></span>`;
+  // Mapping the provided images to the corresponding category thumbnail
+  const imageMap = {
+    groupBiceps: 'media/biceps/image.webp',
+    groupCalves: 'media/calves/image.avif',
+    groupChest: 'media/chest/image.avif',
+    groupCore: 'media/core/image.webp',
+    groupGlutes: 'media/glutes/image.jpg',
+    groupHamstrings: 'media/hamstrings/image.jpeg',  
+    groupMidBack: 'media/mid-back/image.webp',
+    groupQuads: 'media/quads/image.webp',
+    groupShoulders: 'media/shoulders/image.avif',
+    groupTriceps: 'media/triceps/image.webp'    
+      
+  };
+  
+  const imgSrc = imageMap[group];
+  if (imgSrc) {
+    return `<span class="category-icon" aria-hidden="true"><img src="${imgSrc}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:10px;"></span>`;
+  }
+  
+  // Fallback SVG icon for categories without a specific photo assigned
+  const overlays = { groupCore: '<path d="M29 31h7v8h-7zm9 0h7v8h-7zm-9 10h7v8h-7zm9 0h7v8h-7z"/>', groupQuads: '<path d="M25 36h8l-2 12-3 10h-4l-1-12zm10 0h8l1 10-1 12h-4l-3-10z"/>', groupShoulders: '<path d="M19 17q6-6 12 0l-2 9-8 2-5-5zm26 0q-6-6-12 0l2 9 8 2 5-5z"/>' };
+  return `<span class="category-icon" aria-hidden="true"><svg viewBox="0 0 64 64"><g fill="none" stroke="#879994" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="9" r="5"/><path d="M25 16q7-3 14 0l4 15-5 5 3 24M25 16l-4 15 5 5-3 24M21 22l-7 13m29-13 7 13"/></g><g fill="#79d9bb" opacity=".9">${overlays[group] || ''}</g></svg></span>`;
 }
 
 function draw() {
@@ -147,7 +186,10 @@ function draw() {
     const box = $('#e' + d); box.innerHTML = ''; D[d].forEach(ex => box.appendChild(exerciseCard(ex)));
   }
   const all = $('#allExercises'); all.innerHTML = '';
-  const groupOrder = ['groupBiceps', 'groupChest', 'groupCore', 'groupCalves', 'groupGlutes', 'groupHamstrings', 'groupMidBack', 'groupQuads', 'groupShoulders', 'groupTriceps'];
+  
+  // Alphabetically ranked group order: Biceps, Calves, Chest, Core, Glutes, Hamstrings, Mid-Back, Quads, Shoulders, Triceps
+  const groupOrder = ['groupBiceps', 'groupCalves', 'groupChest', 'groupCore', 'groupGlutes', 'groupHamstrings', 'groupMidBack', 'groupQuads', 'groupShoulders', 'groupTriceps'];
+  
   const query = $('#exerciseSearch').value.trim();
   const categoryNav = $('#categoryNav'); categoryNav.innerHTML = '';
   groupOrder.forEach(group => {
